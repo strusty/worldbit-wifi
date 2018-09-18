@@ -1,2 +1,20 @@
 api:
   port: 3000
+
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  dbName: crystalline
+  password: postgres
+  sslmode: disable
+  sslCertificatePath: SSL_CERTIFICATE_PATH
+  sslKeyPath: SSL_KEY_PATH
+  sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
+
+twilio:
+  host: https://api.twilio.com/2010-04-01
+  sid: TWILIO_SID
+  token: TWILIO_ACCESS_TOKEN
+  from: SENDER_NAME
+  messageTemplate: Your confirmation code is %s

@@ -2,6 +2,8 @@ package server
 
 import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/routing"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -10,7 +12,10 @@ type Server struct {
 	*echo.Echo
 }
 
-func New() Server {
+func New(
+	authService auth.Auth,
+	twilioService twilio.Twilio,
+) Server {
 	server := Server{
 		Echo: echo.New(),
 	}
@@ -40,7 +45,10 @@ func New() Server {
 	server.Use(middleware.Recover())
 	server.Use(middleware.CORS())
 
-	authRouter := routing.NewAuthRouter()
+	authRouter := routing.NewAuthRouter(
+		authService,
+		twilioService,
+	)
 	authRouter.Register(server.Group("/auth"))
 
 	return server

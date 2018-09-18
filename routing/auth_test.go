@@ -44,10 +44,15 @@ func generateContextWithInvalidBody() echo.Context {
 
 type AuthServiceMock struct {
 	CreateCodeFn func(request auth.SendCodeRequest) (string, error)
+	VerifyCodeFn func(request auth.VerifyCodeRequest) error
 }
 
 func (mock AuthServiceMock) CreateCode(request auth.SendCodeRequest) (string, error) {
 	return mock.CreateCodeFn(request)
+}
+
+func (mock AuthServiceMock) VerifyCode(request auth.VerifyCodeRequest) error {
+	return mock.VerifyCodeFn(request)
 }
 
 type TwilioServiceMock struct {
@@ -115,5 +120,22 @@ func TestAuthRouter_sendCode(t *testing.T) {
 }
 
 func TestAuthRouter_authenticate(t *testing.T) {
+	testRouter := AuthRouter{
+		authService: AuthServiceMock{
+			VerifyCodeFn: func(request auth.VerifyCodeRequest) error {
+				return nil
+			},
+		},
+	}
 
+	assert.NoError(t, testRouter.authenticate(generateContext()))
+
+	testRouter.authService = AuthServiceMock{
+		VerifyCodeFn: func(request auth.VerifyCodeRequest) error {
+			return errors.New("test_error")
+		},
+	}
+
+	assert.Error(t, testRouter.authenticate(generateContext()))
+	assert.Error(t, testRouter.authenticate(generateContextWithInvalidBody()))
 }

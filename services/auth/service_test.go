@@ -6,6 +6,7 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"time"
 )
 
 type AuthenticationsStoreMock struct {
@@ -64,4 +65,34 @@ func Test_service_CreateCode(t *testing.T) {
 
 	_, err = service.CreateCode(SendCodeRequest{})
 	assert.Error(t, err)
+}
+
+func Test_service_VerifyCode(t *testing.T) {
+	service := service{
+		store: AuthenticationsStoreMock{
+			ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
+				return &database.Authentication{
+					ExpiryDate: time.Now().Add(time.Hour),
+				}, nil
+			},
+		},
+	}
+
+	assert.NoError(t, service.VerifyCode(VerifyCodeRequest{}))
+
+	service.store = AuthenticationsStoreMock{
+		ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
+			return &database.Authentication{}, nil
+		},
+	}
+
+	assert.Error(t, service.VerifyCode(VerifyCodeRequest{}))
+
+	service.store = AuthenticationsStoreMock{
+		ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
+			return nil, errors.New("test_error")
+		},
+	}
+
+	assert.Error(t, service.VerifyCode(VerifyCodeRequest{}))
 }

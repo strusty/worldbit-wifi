@@ -3,6 +3,7 @@ package auth
 import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/random"
+	"github.com/pkg/errors"
 	"time"
 )
 
@@ -30,4 +31,17 @@ func (service service) CreateCode(request SendCodeRequest) (string, error) {
 	}
 
 	return confirmationCode, nil
+}
+
+func (service service) VerifyCode(request VerifyCodeRequest) error {
+	authentication, err := service.store.ByConfirmationCode(request.ConfirmationCode)
+	if err != nil {
+		return err
+	}
+
+	if authentication.ExpiryDate.Before(time.Now()) {
+		return errors.New("You code has already expired. Please request a new one.")
+	}
+
+	return nil
 }

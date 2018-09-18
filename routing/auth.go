@@ -4,7 +4,6 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"github.com/labstack/echo"
-	"github.com/pkg/errors"
 	"net/http"
 )
 
@@ -49,5 +48,16 @@ func (router AuthRouter) sendCode(context echo.Context) error {
 }
 
 func (router AuthRouter) authenticate(context echo.Context) error {
-	return errors.New("not implemented")
+	request := new(auth.VerifyCodeRequest)
+	if err := context.Bind(request); err != nil {
+		return err
+	}
+
+	if err := router.authService.VerifyCode(*request); err != nil {
+		return err
+	}
+
+	return context.JSON(http.StatusOK, map[string]bool{
+		"success": true,
+	})
 }

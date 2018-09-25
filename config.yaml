@@ -18,3 +18,8 @@ twilio:
   token: TWILIO_ACCESS_TOKEN
   from: SENDER_NAME
   messageTemplate: Your confirmation code is %s
+
+recaptcha:
+  secret: GOOGLE_RECAPTCHA_SECRET
+
+confirmationCodeExpiration: EXPIRATION_TIME_IN_SECONDS

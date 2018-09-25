@@ -3,6 +3,7 @@ package server
 import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/routing"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -14,6 +15,7 @@ type Server struct {
 
 func New(
 	authService auth.Auth,
+	captchaService captcha.Captcha,
 	twilioService twilio.Twilio,
 ) Server {
 	server := Server{
@@ -47,6 +49,7 @@ func New(
 
 	authRouter := routing.NewAuthRouter(
 		authService,
+		captchaService,
 		twilioService,
 	)
 	authRouter.Register(server.Group("/auth"))

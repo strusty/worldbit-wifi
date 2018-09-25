@@ -5,6 +5,7 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database/authentications"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/server"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -45,6 +46,9 @@ func main() {
 		auth.New(
 			authentications.NewAuthenticationsStore(db),
 			config.GetInt64("confirmationCodeExpiration"),
+		),
+		captcha.New(
+			config.GetString("captcha.secret"),
 		),
 		twilio.New(
 			config.GetString("twilio.host"),

@@ -49,9 +49,9 @@ func Test_service_CreateCode(t *testing.T) {
 		},
 	}
 
-	code, err := service.CreateCode(SendCodeRequest{})
+	code, err := service.CreateCode("")
 	if assert.NoError(t, err) {
-		newCode, err := service.CreateCode(SendCodeRequest{})
+		newCode, err := service.CreateCode("")
 		if assert.NoError(t, err) {
 			assert.NotEqual(t, code, newCode)
 		}
@@ -63,7 +63,7 @@ func Test_service_CreateCode(t *testing.T) {
 		},
 	}
 
-	_, err = service.CreateCode(SendCodeRequest{})
+	_, err = service.CreateCode("")
 	assert.Error(t, err)
 }
 
@@ -78,7 +78,7 @@ func Test_service_VerifyCode(t *testing.T) {
 		},
 	}
 
-	assert.NoError(t, service.VerifyCode(VerifyCodeRequest{}))
+	assert.NoError(t, service.VerifyCode(""))
 
 	service.store = AuthenticationsStoreMock{
 		ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
@@ -86,7 +86,7 @@ func Test_service_VerifyCode(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, service.VerifyCode(VerifyCodeRequest{}))
+	assert.Error(t, service.VerifyCode(""))
 
 	service.store = AuthenticationsStoreMock{
 		ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
@@ -94,5 +94,5 @@ func Test_service_VerifyCode(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, service.VerifyCode(VerifyCodeRequest{}))
+	assert.Error(t, service.VerifyCode(""))
 }

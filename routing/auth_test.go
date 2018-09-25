@@ -3,7 +3,6 @@ package routing
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
@@ -43,16 +42,16 @@ func generateContextWithInvalidBody() echo.Context {
 }
 
 type AuthServiceMock struct {
-	CreateCodeFn func(request auth.SendCodeRequest) (string, error)
-	VerifyCodeFn func(request auth.VerifyCodeRequest) error
+	CreateCodeFn func(phoneNumber string) (string, error)
+	VerifyCodeFn func(confirmationCode string) error
 }
 
-func (mock AuthServiceMock) CreateCode(request auth.SendCodeRequest) (string, error) {
-	return mock.CreateCodeFn(request)
+func (mock AuthServiceMock) CreateCode(phoneNumber string) (string, error) {
+	return mock.CreateCodeFn(phoneNumber)
 }
 
-func (mock AuthServiceMock) VerifyCode(request auth.VerifyCodeRequest) error {
-	return mock.VerifyCodeFn(request)
+func (mock AuthServiceMock) VerifyCode(confirmationCode string) error {
+	return mock.VerifyCodeFn(confirmationCode)
 }
 
 type TwilioServiceMock struct {
@@ -63,17 +62,28 @@ func (mock TwilioServiceMock) SendConfirmationCode(phoneNumber string, confirmat
 	return mock.SendConfirmationCodeFn(phoneNumber, confirmationCode)
 }
 
+type CaptchaServiceMock struct {
+	CheckCaptchaFn func(responseToken string) (bool, error)
+}
+
+func (mock CaptchaServiceMock) CheckCaptcha(responseToken string) (bool, error) {
+	return mock.CheckCaptchaFn(responseToken)
+}
+
 func TestNewAuthRouter(t *testing.T) {
 	authService := &AuthServiceMock{}
 	twilioService := &TwilioServiceMock{}
+	captchaService := &CaptchaServiceMock{}
 
 	testRouter := AuthRouter{
-		authService:   authService,
-		twilioService: twilioService,
+		authService:    authService,
+		captchaService: captchaService,
+		twilioService:  twilioService,
 	}
 
 	router := NewAuthRouter(
 		authService,
+		captchaService,
 		twilioService,
 	)
 
@@ -87,7 +97,7 @@ func TestAuthRouter_Register(t *testing.T) {
 func TestAuthRouter_sendCode(t *testing.T) {
 	testRouter := AuthRouter{
 		authService: AuthServiceMock{
-			CreateCodeFn: func(request auth.SendCodeRequest) (string, error) {
+			CreateCodeFn: func(phoneNumber string) (string, error) {
 				return "", nil
 			},
 		},
@@ -109,7 +119,7 @@ func TestAuthRouter_sendCode(t *testing.T) {
 	assert.Error(t, testRouter.sendCode(generateContext()))
 
 	testRouter.authService = AuthServiceMock{
-		CreateCodeFn: func(request auth.SendCodeRequest) (string, error) {
+		CreateCodeFn: func(phoneNumber string) (string, error) {
 			return "", errors.New("test_error")
 		},
 	}
@@ -122,8 +132,13 @@ func TestAuthRouter_sendCode(t *testing.T) {
 func TestAuthRouter_authenticate(t *testing.T) {
 	testRouter := AuthRouter{
 		authService: AuthServiceMock{
-			VerifyCodeFn: func(request auth.VerifyCodeRequest) error {
+			VerifyCodeFn: func(confirmationCode string) error {
 				return nil
+			},
+		},
+		captchaService: CaptchaServiceMock{
+			CheckCaptchaFn: func(responseToken string) (bool, error) {
+				return true, nil
 			},
 		},
 	}
@@ -131,8 +146,24 @@ func TestAuthRouter_authenticate(t *testing.T) {
 	assert.NoError(t, testRouter.authenticate(generateContext()))
 
 	testRouter.authService = AuthServiceMock{
-		VerifyCodeFn: func(request auth.VerifyCodeRequest) error {
+		VerifyCodeFn: func(confirmationCode string) error {
 			return errors.New("test_error")
+		},
+	}
+
+	assert.Error(t, testRouter.authenticate(generateContext()))
+
+	testRouter.captchaService = CaptchaServiceMock{
+		CheckCaptchaFn: func(responseToken string) (bool, error) {
+			return false, nil
+		},
+	}
+
+	assert.Error(t, testRouter.authenticate(generateContext()))
+
+	testRouter.captchaService = CaptchaServiceMock{
+		CheckCaptchaFn: func(responseToken string) (bool, error) {
+			return false, errors.New("test_error")
 		},
 	}
 

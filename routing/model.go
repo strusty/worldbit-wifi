@@ -1,4 +1,4 @@
-package auth
+package routing
 
 type SendCodeRequest struct {
 	PhoneNumber string
@@ -6,4 +6,5 @@ type SendCodeRequest struct {
 
 type VerifyCodeRequest struct {
 	ConfirmationCode string
+	Captcha          string
 }

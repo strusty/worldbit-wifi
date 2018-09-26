@@ -4,7 +4,7 @@ type Worldbit interface {
 	CreateExchange(request CreateExchangeRequest) (*CreateExchangeResult, error)
 	CreateAccount(request CreateAccountRequest) (*CreateAccountResponseData, error)
 	GetExchangeRate() (float64, error)
-	MonitorExchangeStatus(statusURL string) (bool, error)
+	MonitorExchangeStatus(statusURL string) error
 }
 
 type Config struct {

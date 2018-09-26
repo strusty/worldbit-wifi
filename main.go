@@ -6,11 +6,14 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/server"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	config "github.com/spf13/viper"
 	"log"
+	"time"
 )
 
 func main() {
@@ -55,7 +58,22 @@ func main() {
 			config.GetString("twilio.sid"),
 			config.GetString("twilio.token"),
 			config.GetString("twilio.from"),
-			config.GetString("twilio.messageTemplate"),
+			config.GetString("twilio.confirmationCodeMessageTemplate"),
+			config.GetString("twilio.voucherMessageTemplate"),
+		),
+		worldbit.New(
+			worldbit.Config{
+				APIKey:            config.GetString("worldbit.apiKey"),
+				APISecret:         config.GetString("worldbit.apiSecret"),
+				MerchantID:        config.GetString("worldbit.merchantID"),
+				Host:              config.GetString("worldbit.host"),
+				MonitoringTimeout: int64(time.Hour.Seconds()) * 24,
+			},
+		),
+		cloudtrax.New(
+			config.GetString("cloudtrax.apiKey"),
+			config.GetString("cloudtrax.apiSecret"),
+			config.GetString("cloudtrax.host"),
 		),
 	)
 

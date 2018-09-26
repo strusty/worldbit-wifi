@@ -17,9 +17,10 @@ func TestNew(t *testing.T) {
 		accessToken: base64.StdEncoding.EncodeToString(
 			[]byte(sid + ":" + "token"),
 		),
-		endpoint:        host + "/Accounts/" + sid + "/Messages.json",
-		from:            "from",
-		messageTemplate: "template",
+		endpoint:                        host + "/Accounts/" + sid + "/Messages.json",
+		from:                            "from",
+		confirmationCodeMessageTemplate: "template",
+		voucherMessageTemplate:          "other_template",
 	}
 
 	service := New(
@@ -28,6 +29,7 @@ func TestNew(t *testing.T) {
 		"token",
 		"from",
 		"template",
+		"other_template",
 	)
 
 	assert.Equal(t, testService, service)
@@ -51,8 +53,10 @@ func Test_service_SendConfirmationCode(t *testing.T) {
 			), nil
 		},
 	)
-
-	assert.NoError(t, service.SendConfirmationCode("", ""))
+	t.Run("Success", func(t *testing.T) {
+		assert.NoError(t, service.SendConfirmationCode("", ""))
+		assert.NoError(t, service.SendVoucher("", ""))
+	})
 
 	httpmock.Reset()
 	httpmock.RegisterResponder(
@@ -65,8 +69,10 @@ func Test_service_SendConfirmationCode(t *testing.T) {
 			), nil
 		},
 	)
-
-	assert.Error(t, service.SendConfirmationCode("", ""))
+	t.Run("Only code error", func(t *testing.T) {
+		assert.Error(t, service.SendConfirmationCode("", ""))
+		assert.Error(t, service.SendVoucher("", ""))
+	})
 
 	httpmock.Reset()
 	httpmock.RegisterResponder(
@@ -79,10 +85,15 @@ func Test_service_SendConfirmationCode(t *testing.T) {
 			), nil
 		},
 	)
+	t.Run("Code and message error", func(t *testing.T) {
+		err := service.SendConfirmationCode("", "")
+		assert.Error(t, err)
+		assert.Equal(t, "test_error", err.Error())
 
-	err := service.SendConfirmationCode("", "")
-	assert.Error(t, err)
-	assert.Equal(t, "test_error", err.Error())
+		err = service.SendVoucher("", "")
+		assert.Error(t, err)
+		assert.Equal(t, "test_error", err.Error())
+	})
 
 	httpmock.Reset()
 	httpmock.RegisterResponder(
@@ -96,7 +107,10 @@ func Test_service_SendConfirmationCode(t *testing.T) {
 		},
 	)
 
-	assert.Error(t, service.SendConfirmationCode("", ""))
+	t.Run("Invalid response body", func(t *testing.T) {
+		assert.Error(t, service.SendConfirmationCode("", ""))
+		assert.Error(t, service.SendVoucher("", ""))
+	})
 
 	httpmock.Reset()
 	httpmock.RegisterResponder(
@@ -106,6 +120,8 @@ func Test_service_SendConfirmationCode(t *testing.T) {
 			return nil, errors.New("test_error")
 		},
 	)
-
-	assert.Error(t, service.SendConfirmationCode("", ""))
+	t.Run("Request failed", func(t *testing.T) {
+		assert.Error(t, service.SendConfirmationCode("", ""))
+		assert.Error(t, service.SendVoucher("", ""))
+	})
 }

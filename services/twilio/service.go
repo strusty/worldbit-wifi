@@ -10,31 +10,48 @@ import (
 )
 
 type service struct {
-	accessToken     string
-	endpoint        string
-	from            string
-	messageTemplate string
+	accessToken                     string
+	endpoint                        string
+	from                            string
+	confirmationCodeMessageTemplate string
+	voucherMessageTemplate          string
 }
 
-func New(host string, sid string, token string, from string, messageTemplate string) Twilio {
+func New(
+	host string,
+	sid string,
+	token string,
+	from string,
+	confirmationCodeMessageTemplate string,
+	voucherMessageTemplate string,
+) Twilio {
 	return service{
 		accessToken: base64.StdEncoding.EncodeToString(
 			[]byte(sid + ":" + token),
 		),
-		endpoint:        host + "/Accounts/" + sid + "/Messages.json",
-		from:            from,
-		messageTemplate: messageTemplate,
+		endpoint:                        host + "/Accounts/" + sid + "/Messages.json",
+		from:                            from,
+		confirmationCodeMessageTemplate: confirmationCodeMessageTemplate,
+		voucherMessageTemplate:          voucherMessageTemplate,
 	}
 }
 
 func (service service) SendConfirmationCode(phoneNumber string, confirmationCode string) error {
+	return service.sendTemplatedMessage(phoneNumber, service.confirmationCodeMessageTemplate, confirmationCode)
+}
+
+func (service service) SendVoucher(phoneNumber string, voucher string) error {
+	return service.sendTemplatedMessage(phoneNumber, service.voucherMessageTemplate, voucher)
+}
+
+func (service service) sendTemplatedMessage(phoneNumber string, template string, values ...interface{}) error {
 	type Response struct {
 		ErrorCode    *int64  `json:"code"`
 		ErrorMessage *string `json:"message"`
 	}
 
 	form := url.Values{}
-	form.Add("Body", fmt.Sprintf(service.messageTemplate, confirmationCode))
+	form.Add("Body", fmt.Sprintf(template, values...))
 	form.Add("To", "+"+phoneNumber)
 	form.Add("From", service.from)
 

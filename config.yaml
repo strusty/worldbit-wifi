@@ -17,7 +17,19 @@ twilio:
   sid: TWILIO_SID
   token: TWILIO_ACCESS_TOKEN
   from: SENDER_NAME
-  messageTemplate: Your confirmation code is %s
+  confirmationCodeMessageTemplate: Your confirmation code is %s
+  voucherMessageTemplate: Your Wi-Fi voucher is %s
+
+worldbit:
+  apiKey: API_KEY
+  apiSecret: API_SECRET
+  merchantID: MERCHANT_ID
+  host: https://api.worldbit.com/api/v1
+
+cloudtrax:
+  apiKey: API_KEY
+  apiSecret: API_SECRET
+  host: api.cloudtrax.com
 
 recaptcha:
   secret: GOOGLE_RECAPTCHA_SECRET

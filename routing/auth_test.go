@@ -41,35 +41,6 @@ func generateContextWithInvalidBody() echo.Context {
 	return e.NewContext(request, recorder)
 }
 
-type AuthServiceMock struct {
-	CreateCodeFn func(phoneNumber string) (string, error)
-	VerifyCodeFn func(confirmationCode string) error
-}
-
-func (mock AuthServiceMock) CreateCode(phoneNumber string) (string, error) {
-	return mock.CreateCodeFn(phoneNumber)
-}
-
-func (mock AuthServiceMock) VerifyCode(confirmationCode string) error {
-	return mock.VerifyCodeFn(confirmationCode)
-}
-
-type TwilioServiceMock struct {
-	SendConfirmationCodeFn func(phoneNumber string, confirmationCode string) error
-}
-
-func (mock TwilioServiceMock) SendConfirmationCode(phoneNumber string, confirmationCode string) error {
-	return mock.SendConfirmationCodeFn(phoneNumber, confirmationCode)
-}
-
-type CaptchaServiceMock struct {
-	CheckCaptchaFn func(responseToken string) (bool, error)
-}
-
-func (mock CaptchaServiceMock) CheckCaptcha(responseToken string) (bool, error) {
-	return mock.CheckCaptchaFn(responseToken)
-}
-
 func TestNewAuthRouter(t *testing.T) {
 	authService := &AuthServiceMock{}
 	twilioService := &TwilioServiceMock{}
@@ -101,22 +72,25 @@ func TestAuthRouter_sendCode(t *testing.T) {
 				return "", nil
 			},
 		},
-		twilioService: TwilioServiceMock{
+		twilioService: &TwilioServiceMock{
 			SendConfirmationCodeFn: func(phoneNumber string, confirmationCode string) error {
 				return nil
 			},
 		},
 	}
+	t.Run("Success", func(t *testing.T) {
+		assert.NoError(t, testRouter.sendCode(generateContext()))
+	})
 
-	assert.NoError(t, testRouter.sendCode(generateContext()))
-
-	testRouter.twilioService = TwilioServiceMock{
+	testRouter.twilioService = &TwilioServiceMock{
 		SendConfirmationCodeFn: func(phoneNumber string, confirmationCode string) error {
 			return errors.New("test_error")
 		},
 	}
 
-	assert.Error(t, testRouter.sendCode(generateContext()))
+	t.Run("Unable to send confirmation code error", func(t *testing.T) {
+		assert.Error(t, testRouter.sendCode(generateContext()))
+	})
 
 	testRouter.authService = AuthServiceMock{
 		CreateCodeFn: func(phoneNumber string) (string, error) {
@@ -124,9 +98,13 @@ func TestAuthRouter_sendCode(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, testRouter.sendCode(generateContext()))
-	assert.Error(t, testRouter.sendCode(generateContextWithInvalidBody()))
+	t.Run("Unable to create confirmation code error", func(t *testing.T) {
+		assert.Error(t, testRouter.sendCode(generateContext()))
+	})
 
+	t.Run("Invalid body error", func(t *testing.T) {
+		assert.Error(t, testRouter.sendCode(generateContextWithInvalidBody()))
+	})
 }
 
 func TestAuthRouter_authenticate(t *testing.T) {
@@ -143,7 +121,9 @@ func TestAuthRouter_authenticate(t *testing.T) {
 		},
 	}
 
-	assert.NoError(t, testRouter.authenticate(generateContext()))
+	t.Run("Success", func(t *testing.T) {
+		assert.NoError(t, testRouter.authenticate(generateContext()))
+	})
 
 	testRouter.authService = AuthServiceMock{
 		VerifyCodeFn: func(confirmationCode string) error {
@@ -151,7 +131,9 @@ func TestAuthRouter_authenticate(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, testRouter.authenticate(generateContext()))
+	t.Run("Code verification error", func(t *testing.T) {
+		assert.Error(t, testRouter.authenticate(generateContext()))
+	})
 
 	testRouter.captchaService = CaptchaServiceMock{
 		CheckCaptchaFn: func(responseToken string) (bool, error) {
@@ -159,7 +141,9 @@ func TestAuthRouter_authenticate(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, testRouter.authenticate(generateContext()))
+	t.Run("Check captcha failed", func(t *testing.T) {
+		assert.Error(t, testRouter.authenticate(generateContext()))
+	})
 
 	testRouter.captchaService = CaptchaServiceMock{
 		CheckCaptchaFn: func(responseToken string) (bool, error) {
@@ -167,6 +151,11 @@ func TestAuthRouter_authenticate(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, testRouter.authenticate(generateContext()))
-	assert.Error(t, testRouter.authenticate(generateContextWithInvalidBody()))
+	t.Run("Check captcha error", func(t *testing.T) {
+		assert.Error(t, testRouter.authenticate(generateContext()))
+	})
+
+	t.Run("Invalid body error", func(t *testing.T) {
+		assert.Error(t, testRouter.authenticate(generateContextWithInvalidBody()))
+	})
 }

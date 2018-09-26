@@ -4,7 +4,9 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/routing"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -17,6 +19,8 @@ func New(
 	authService auth.Auth,
 	captchaService captcha.Captcha,
 	twilioService twilio.Twilio,
+	worldbitService worldbit.Worldbit,
+	cloudtraxService cloudtrax.Cloudtrax,
 ) Server {
 	server := Server{
 		Echo: echo.New(),
@@ -53,6 +57,13 @@ func New(
 		twilioService,
 	)
 	authRouter.Register(server.Group("/auth"))
+
+	paymentRouter := routing.NewCryptoRouter(
+		worldbitService,
+		cloudtraxService,
+		twilioService,
+	)
+	paymentRouter.Register(server.Group("/crypto"))
 
 	return server
 }

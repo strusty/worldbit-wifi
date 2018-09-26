@@ -49,22 +49,25 @@ func Test_service_CreateCode(t *testing.T) {
 		},
 	}
 
-	code, err := service.CreateCode("")
-	if assert.NoError(t, err) {
-		newCode, err := service.CreateCode("")
+	t.Run("Succesful generation of a random code", func(t *testing.T) {
+		code, err := service.CreateCode("")
 		if assert.NoError(t, err) {
-			assert.NotEqual(t, code, newCode)
+			newCode, err := service.CreateCode("")
+			if assert.NoError(t, err) {
+				assert.NotEqual(t, code, newCode)
+			}
 		}
-	}
+	})
 
 	service.store = AuthenticationsStoreMock{
 		CreateFn: func(entity *database.Authentication) error {
 			return errors.New("test_error")
 		},
 	}
-
-	_, err = service.CreateCode("")
-	assert.Error(t, err)
+	t.Run("Code generation unsuccesful", func(t *testing.T) {
+		_, err := service.CreateCode("")
+		assert.Error(t, err)
+	})
 }
 
 func Test_service_VerifyCode(t *testing.T) {
@@ -78,7 +81,9 @@ func Test_service_VerifyCode(t *testing.T) {
 		},
 	}
 
-	assert.NoError(t, service.VerifyCode(""))
+	t.Run("Success", func(t *testing.T) {
+		assert.NoError(t, service.VerifyCode(""))
+	})
 
 	service.store = AuthenticationsStoreMock{
 		ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
@@ -86,7 +91,9 @@ func Test_service_VerifyCode(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, service.VerifyCode(""))
+	t.Run("Code expired error", func(t *testing.T) {
+		assert.Error(t, service.VerifyCode(""))
+	})
 
 	service.store = AuthenticationsStoreMock{
 		ByConfirmationCodeFn: func(confirmationCode string) (*database.Authentication, error) {
@@ -94,5 +101,7 @@ func Test_service_VerifyCode(t *testing.T) {
 		},
 	}
 
-	assert.Error(t, service.VerifyCode(""))
+	t.Run("Code retrieval error", func(t *testing.T) {
+		assert.Error(t, service.VerifyCode(""))
+	})
 }

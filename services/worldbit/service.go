@@ -95,12 +95,12 @@ func (service service) GetExchangeRate() (float64, error) {
 	return response.WbtUSD, nil
 }
 
-func (service service) MonitorExchangeStatus(statusURL string) (bool, error) {
+func (service service) MonitorExchangeStatus(statusURL string) error {
 	startingDate := time.Now()
 	startingPower := 3
 	for {
 		if time.Now().Unix()-startingDate.Unix() >= int64(time.Second.Seconds())*service.MonitoringTimeout {
-			return false, errors.New("Operation timed out")
+			return errors.New("Operation timed out")
 		}
 		time.Sleep(time.Duration(math.Exp(float64(startingPower))) * time.Second)
 		startingPower += 1
@@ -117,9 +117,9 @@ func (service service) MonitorExchangeStatus(statusURL string) (bool, error) {
 
 		switch response.Data.Status {
 		case Timeout:
-			return false, errors.New("Operation timed out")
+			return errors.New("Operation timed out")
 		case Completed, PreInformCompleted, ConfirmedDeposit, ReceivedDeposit:
-			return true, nil
+			return nil
 		}
 	}
 }

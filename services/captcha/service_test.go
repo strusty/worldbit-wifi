@@ -50,27 +50,35 @@ func TestCaptcha_CheckCaptcha(t *testing.T) {
 		},
 	)
 
-	passed, err := service.CheckCaptcha(testResponseSuccessToken)
+	t.Run("Success", func(t *testing.T) {
+		passed, err := service.CheckCaptcha(testResponseSuccessToken)
 
-	if assert.NoError(t, err) {
-		assert.True(t, passed)
-	}
+		if assert.NoError(t, err) {
+			assert.True(t, passed)
+		}
+	})
 
-	passed, err = service.CheckCaptcha(testResponseFailureToken)
+	t.Run("Captcha failed", func(t *testing.T) {
+		passed, err := service.CheckCaptcha(testResponseFailureToken)
 
-	if assert.NoError(t, err) {
-		assert.False(t, passed)
-	}
+		if assert.NoError(t, err) {
+			assert.False(t, passed)
+		}
+	})
 
-	passed, err = service.CheckCaptcha(testResponseInvalidToken)
+	t.Run("Invalid response body", func(t *testing.T) {
+		passed, err := service.CheckCaptcha(testResponseInvalidToken)
 
-	if assert.Error(t, err) {
-		assert.False(t, passed)
-	}
+		if assert.Error(t, err) {
+			assert.False(t, passed)
+		}
+	})
 
-	passed, err = service.CheckCaptcha("")
+	t.Run("Request failed", func(t *testing.T) {
+		passed, err := service.CheckCaptcha("")
 
-	if assert.Error(t, err) {
-		assert.False(t, passed)
-	}
+		if assert.Error(t, err) {
+			assert.False(t, passed)
+		}
+	})
 }

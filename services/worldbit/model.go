@@ -1,12 +1,18 @@
 package worldbit
 
-type CreateExchangeRequest struct {
+type createExchangeRequest struct {
 	Amount     float64 `json:"amount"`
 	Currency1  string  `json:"currency1"`
 	Currency2  string  `json:"currency2"`
 	BuyerEmail string  `json:"buyer_email"`
 	Address    string  `json:"address"`
 	Merchant   string  `json:"merchant"`
+}
+
+type CreateExchangeRequest struct {
+	Amount         float64
+	SenderCurrency string
+	Address        string
 }
 
 type CreateExchangeResponse struct {
@@ -41,7 +47,7 @@ const (
 	Completed          = 100
 )
 
-type CreateAccountRequest struct {
+type createAccountRequest struct {
 	Coin       string `json:"coin"`
 	BuyerEmail string `json:"buyer_email"`
 }

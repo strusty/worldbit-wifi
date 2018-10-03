@@ -1,12 +1,13 @@
 package routing
 
 import (
+	"log"
+	"net/http"
+
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
-	"log"
-	"net/http"
 )
 
 type CryptoRouter struct {
@@ -37,10 +38,7 @@ func (router CryptoRouter) requestPayment(context echo.Context) error {
 		return err
 	}
 
-	account, err := router.worldbitService.CreateAccount(worldbit.CreateAccountRequest{
-		Coin:       "WBTx",
-		BuyerEmail: "test@test.test",
-	})
+	account, err := router.worldbitService.CreateAccount()
 	if err != nil {
 		return err
 	}
@@ -51,11 +49,9 @@ func (router CryptoRouter) requestPayment(context echo.Context) error {
 	}
 
 	exchange, err := router.worldbitService.CreateExchange(worldbit.CreateExchangeRequest{
-		Amount:     request.Amount * rate,
-		Currency1:  "WBTx",
-		Currency2:  request.Currency,
-		BuyerEmail: "test@test.test",
-		Address:    account.Address,
+		Amount:         request.Amount * rate,
+		SenderCurrency: request.Currency,
+		Address:        account.Address,
 	})
 	if err != nil {
 		return err

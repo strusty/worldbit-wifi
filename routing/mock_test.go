@@ -65,7 +65,7 @@ func (mock *CloudtraxServiceMock) CreateVoucher(networkID string, voucher cloudt
 */
 type WorldbitServiceMock struct {
 	CreateExchangeFn               func(request worldbit.CreateExchangeRequest) (*worldbit.CreateExchangeResult, error)
-	CreateAccountFn                func(request worldbit.CreateAccountRequest) (*worldbit.CreateAccountResponseData, error)
+	CreateAccountFn                func() (*worldbit.CreateAccountResponseData, error)
 	GetExchangeRateFn              func() (float64, error)
 	MonitorExchangeStatusFnInvoked bool
 	MonitorExchangeStatusFn        func(statusURL string) error
@@ -75,8 +75,8 @@ func (mock WorldbitServiceMock) CreateExchange(request worldbit.CreateExchangeRe
 	return mock.CreateExchangeFn(request)
 }
 
-func (mock WorldbitServiceMock) CreateAccount(request worldbit.CreateAccountRequest) (*worldbit.CreateAccountResponseData, error) {
-	return mock.CreateAccountFn(request)
+func (mock WorldbitServiceMock) CreateAccount() (*worldbit.CreateAccountResponseData, error) {
+	return mock.CreateAccountFn()
 }
 
 func (mock WorldbitServiceMock) GetExchangeRate() (float64, error) {

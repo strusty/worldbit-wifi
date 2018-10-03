@@ -2,10 +2,11 @@ package worldbit
 
 import (
 	"encoding/json"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/http"
-	"github.com/pkg/errors"
 	"math"
 	"time"
+
+	"git.sfxdx.ru/crystalline/wi-fi-backend/http"
+	"github.com/pkg/errors"
 )
 
 type service struct {
@@ -19,8 +20,16 @@ func New(config Config) Worldbit {
 }
 
 func (service service) CreateExchange(request CreateExchangeRequest) (*CreateExchangeResult, error) {
-	request.Merchant = service.Config.MerchantID
-	requestBytes, err := json.Marshal(request)
+	worldbitRequest := createExchangeRequest{
+		Amount:     request.Amount,
+		Currency1:  service.DefaultCurrency,
+		Currency2:  request.SenderCurrency,
+		BuyerEmail: service.DefaultEmail,
+		Address:    request.Address,
+		Merchant:   service.MerchantID,
+	}
+
+	requestBytes, err := json.Marshal(worldbitRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -48,8 +57,11 @@ func (service service) CreateExchange(request CreateExchangeRequest) (*CreateExc
 	return &response.Result, nil
 }
 
-func (service service) CreateAccount(request CreateAccountRequest) (*CreateAccountResponseData, error) {
-	requestBytes, err := json.Marshal(request)
+func (service service) CreateAccount() (*CreateAccountResponseData, error) {
+	requestBytes, err := json.Marshal(createAccountRequest{
+		Coin:       service.Config.DefaultCurrency,
+		BuyerEmail: service.Config.DefaultEmail,
+	})
 	if err != nil {
 		return nil, err
 	}

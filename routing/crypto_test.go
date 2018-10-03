@@ -1,13 +1,14 @@
 package routing
 
 import (
+	"testing"
+	"time"
+
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
-	"testing"
-	"time"
 )
 
 func TestNewCryptoRouter(t *testing.T) {
@@ -36,7 +37,7 @@ func TestCryptoRouter_Register(t *testing.T) {
 
 func TestCryptoRouter_requestPayment(t *testing.T) {
 	worldbitService := &WorldbitServiceMock{
-		CreateAccountFn: func(request worldbit.CreateAccountRequest) (*worldbit.CreateAccountResponseData, error) {
+		CreateAccountFn: func() (*worldbit.CreateAccountResponseData, error) {
 			return &worldbit.CreateAccountResponseData{}, nil
 		},
 		GetExchangeRateFn: func() (float64, error) {
@@ -143,7 +144,7 @@ func TestCryptoRouter_requestPayment(t *testing.T) {
 		assert.False(t, twilioService.SendVoucherFnInvoked)
 	})
 
-	worldbitService.CreateAccountFn = func(request worldbit.CreateAccountRequest) (*worldbit.CreateAccountResponseData, error) {
+	worldbitService.CreateAccountFn = func() (*worldbit.CreateAccountResponseData, error) {
 		return nil, errors.New("test_error")
 	}
 

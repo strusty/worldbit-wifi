@@ -2,7 +2,7 @@ package worldbit
 
 type Worldbit interface {
 	CreateExchange(request CreateExchangeRequest) (*CreateExchangeResult, error)
-	CreateAccount(request CreateAccountRequest) (*CreateAccountResponseData, error)
+	CreateAccount() (*CreateAccountResponseData, error)
 	GetExchangeRate() (float64, error)
 	MonitorExchangeStatus(statusURL string) error
 }
@@ -13,4 +13,6 @@ type Config struct {
 	MerchantID        string
 	Host              string
 	MonitoringTimeout int64
+	DefaultCurrency   string
+	DefaultEmail      string
 }

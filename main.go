@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database/authentications"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/server"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
@@ -12,8 +14,6 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	config "github.com/spf13/viper"
-	"log"
-	"time"
 )
 
 func main() {
@@ -67,7 +67,9 @@ func main() {
 				APISecret:         config.GetString("worldbit.apiSecret"),
 				MerchantID:        config.GetString("worldbit.merchantID"),
 				Host:              config.GetString("worldbit.host"),
-				MonitoringTimeout: int64(time.Hour.Seconds()) * 24,
+				MonitoringTimeout: config.GetInt64("worldbit.monitoringTimeout"),
+				DefaultCurrency:   config.GetString("worldbit.defaultCurrency"),
+				DefaultEmail:      config.GetString("worldbit.defaultEmail"),
 			},
 		),
 		cloudtrax.New(

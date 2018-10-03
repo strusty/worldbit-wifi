@@ -1,11 +1,12 @@
 package worldbit
 
 import (
+	"net/http"
+	"testing"
+
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/jarcoal/httpmock.v1"
-	"net/http"
-	"testing"
 )
 
 func TestNew(t *testing.T) {
@@ -165,7 +166,7 @@ func Test_service_CreateAccount(t *testing.T) {
 	)
 
 	t.Run("Success", func(t *testing.T) {
-		result, err := service.CreateAccount(CreateAccountRequest{})
+		result, err := service.CreateAccount()
 		if assert.NoError(t, err) && assert.NotNil(t, result) {
 			assert.Equal(t, "2MvRDW2zuaKY8yGgBfjFuwvVmaYvdHp7XVd", result.Address)
 			assert.Equal(t, "buyer@email.com", result.BuyerEmail)
@@ -187,7 +188,7 @@ func Test_service_CreateAccount(t *testing.T) {
 	)
 
 	t.Run("Unknown error", func(t *testing.T) {
-		result, err := service.CreateAccount(CreateAccountRequest{})
+		result, err := service.CreateAccount()
 		if assert.Error(t, err) && assert.Nil(t, result) {
 			assert.Equal(t, "Unknown error occurred", err.Error())
 		}
@@ -206,7 +207,7 @@ func Test_service_CreateAccount(t *testing.T) {
 	)
 
 	t.Run("Error with message", func(t *testing.T) {
-		result, err := service.CreateAccount(CreateAccountRequest{})
+		result, err := service.CreateAccount()
 		if assert.Error(t, err) && assert.Nil(t, result) {
 			assert.Equal(t, "test_error", err.Error())
 		}
@@ -225,7 +226,7 @@ func Test_service_CreateAccount(t *testing.T) {
 	)
 
 	t.Run("Invalid response body", func(t *testing.T) {
-		result, err := service.CreateAccount(CreateAccountRequest{})
+		result, err := service.CreateAccount()
 		assert.Error(t, err)
 		assert.Nil(t, result)
 	})
@@ -240,7 +241,7 @@ func Test_service_CreateAccount(t *testing.T) {
 	)
 
 	t.Run("Request failed", func(t *testing.T) {
-		result, err := service.CreateAccount(CreateAccountRequest{})
+		result, err := service.CreateAccount()
 		assert.Error(t, err)
 		assert.Nil(t, result)
 	})

@@ -25,6 +25,9 @@ worldbit:
   apiSecret: API_SECRET
   merchantID: MERCHANT_ID
   host: https://api.worldbit.com/api/v1
+  monitoringTimeout: 172800 # In seconds
+  defaultCurrency: WBTx
+  defaultEmail: default@email.com
 
 cloudtrax:
   apiKey: API_KEY

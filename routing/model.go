@@ -10,19 +10,10 @@ type VerifyCodeRequest struct {
 }
 
 type PaymentRequest struct {
-	PhoneNumber string  `json:"phoneNumber"`
-	Currency    string  `json:"currency"`
-	Amount      float64 `json:"amount"`
-	NetworkID   string  `json:"networkID"`
-	Voucher     Voucher `json:"voucher"`
-}
-
-type Voucher struct {
-	Duration  int64 `json:"duration"`
-	MaxUsers  int64 `json:"maxUsers"`
-	UpLimit   int64 `json:"upLimit"`
-	DownLimit int64 `json:"downLimit"`
-	PurgeDays int64 `json:"purgeDays"`
+	PhoneNumber   string `json:"phoneNumber"`
+	NetworkID     string `json:"networkID"`
+	Currency      string `json:"currency"`
+	PricingPlanID string `json:"pricingPlanID"`
 }
 
 type PaymentResponse struct {

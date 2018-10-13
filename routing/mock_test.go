@@ -1,7 +1,9 @@
 package routing
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 )
 
@@ -48,16 +50,16 @@ func (mock CaptchaServiceMock) CheckCaptcha(responseToken string) (bool, error) 
 }
 
 /*
-	CloudtraxServiceMock
+	RadiusServiceMock
 */
-type CloudtraxServiceMock struct {
-	CreateVoucherFnInvoked bool
-	CreateVoucherFn        func(networkID string, voucher cloudtrax.Voucher) (string, error)
+type RadiusServiceMock struct {
+	CreateCredentialsFnInvoked bool
+	CreateCredentialsFn        func(plan radius.PricingPlan) (string, error)
 }
 
-func (mock *CloudtraxServiceMock) CreateVoucher(networkID string, voucher cloudtrax.Voucher) (string, error) {
-	mock.CreateVoucherFnInvoked = true
-	return mock.CreateVoucherFn(networkID, voucher)
+func (mock *RadiusServiceMock) CreateCredentials(plan radius.PricingPlan) (string, error) {
+	mock.CreateCredentialsFnInvoked = true
+	return mock.CreateCredentialsFn(plan)
 }
 
 /*
@@ -86,4 +88,51 @@ func (mock WorldbitServiceMock) GetExchangeRate() (float64, error) {
 func (mock *WorldbitServiceMock) MonitorExchangeStatus(statusURL string) error {
 	mock.MonitorExchangeStatusFnInvoked = true
 	return mock.MonitorExchangeStatusFn(statusURL)
+}
+
+/*
+	PricingPlanServiceMock
+*/
+type PricingPlanServiceMock struct {
+	CreateFn func(plan *pricing_plans.PricingPlan) error
+	UpdateFn func(plan *pricing_plans.PricingPlan) error
+	DeleteFn func(id string) error
+	AllFn    func() ([]pricing_plans.PricingPlan, error)
+	ByIDFn   func(id string) (*pricing_plans.PricingPlan, error)
+}
+
+func (mock PricingPlanServiceMock) Create(plan *pricing_plans.PricingPlan) error {
+	return mock.CreateFn(plan)
+}
+
+func (mock PricingPlanServiceMock) Update(plan *pricing_plans.PricingPlan) error {
+	return mock.UpdateFn(plan)
+}
+
+func (mock PricingPlanServiceMock) Delete(id string) error {
+	return mock.DeleteFn(id)
+}
+
+func (mock PricingPlanServiceMock) All() ([]pricing_plans.PricingPlan, error) {
+	return mock.AllFn()
+}
+
+func (mock PricingPlanServiceMock) ByID(id string) (*pricing_plans.PricingPlan, error) {
+	return mock.ByIDFn(id)
+}
+
+/*
+	AdminServiceMock
+*/
+type AdminServiceMock struct {
+	LoginFn          func(request admins.LoginRequest) (*admins.JWTResponse, error)
+	ChangePasswordFn func(adminID string, request admins.ChangePasswordRequest) error
+}
+
+func (mock AdminServiceMock) Login(request admins.LoginRequest) (*admins.JWTResponse, error) {
+	return mock.LoginFn(request)
+}
+
+func (mock AdminServiceMock) ChangePassword(adminID string, request admins.ChangePasswordRequest) error {
+	return mock.ChangePasswordFn(adminID, request)
 }

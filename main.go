@@ -3,17 +3,27 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
+	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/database/admin"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database/authentications"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/database/pricing_plan"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database/check"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database/reply"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/server"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	config "github.com/spf13/viper"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
@@ -21,9 +31,21 @@ func main() {
 
 	config.AddConfigPath("./")
 	config.SetConfigName("config")
+	var prefix string
+	if os.Getenv("CRMODE") == "local" {
+		prefix = "local"
+	} else {
+		prefix = "default"
+	}
 
 	if err := config.ReadInConfig(); err != nil {
 		log.Fatalf("Fatal error getting config from file: %s \n", err)
+	}
+
+	config := config.Sub(prefix)
+
+	if err := jwt.SetRandomSecret(); err != nil {
+		log.Fatalf("Fatal error setting jwt secret: %s \n", err)
 	}
 
 	db, err := gorm.Open(
@@ -45,7 +67,45 @@ func main() {
 		log.Fatalf("Fatal error connecting to database: %s \n", err)
 	}
 
-	apiServer := server.New(
+	radiusDB, err := gorm.Open(
+		"postgres",
+		fmt.Sprintf(
+			"host=%s port=%s user=%s dbname=%s password=%s sslmode=%s sslcert=%s sslkey=%s sslrootcert=%s",
+			config.GetString("radusDatabase.host"),
+			config.GetString("radusDatabase.port"),
+			config.GetString("radusDatabase.user"),
+			config.GetString("radusDatabase.dbName"),
+			config.GetString("radusDatabase.password"),
+			config.GetString("radusDatabase.sslMode"),
+			config.GetString("radusDatabase.sslCertificatePath"),
+			config.GetString("radusDatabase.sslKeyPath"),
+			config.GetString("radusDatabase.sslRootCertificatePath"),
+		),
+	)
+	if err != nil {
+		log.Fatalf("Fatal error connecting to database: %s \n", err)
+	}
+
+	adminStore := admin.NewAdminStore(db)
+	adminLoginDefault := config.GetString("admin.login")
+	adminPasswordDefault := config.GetString("admin.password")
+	_, err = adminStore.ByLogin(adminLoginDefault)
+	if err != nil {
+		hashedPass, err := bcrypt.GenerateFromPassword([]byte(adminPasswordDefault), 15)
+		if err != nil {
+			log.Fatalf("Unable to pregenerate admin: %s\n", err)
+		}
+
+		if err := adminStore.Create(&database.Admin{
+			ID:       "admin_id",
+			Login:    adminLoginDefault,
+			Password: string(hashedPass),
+		}); err != nil {
+			log.Fatalf("Unable to pregenerate admin: %s\n", err)
+		}
+	}
+
+	apiServer, err := server.New(
 		auth.New(
 			authentications.NewAuthenticationsStore(db),
 			config.GetInt64("confirmationCodeExpiration"),
@@ -72,12 +132,20 @@ func main() {
 				DefaultEmail:      config.GetString("worldbit.defaultEmail"),
 			},
 		),
-		cloudtrax.New(
-			config.GetString("cloudtrax.apiKey"),
-			config.GetString("cloudtrax.apiSecret"),
-			config.GetString("cloudtrax.host"),
+		radius.New(
+			check.New(radiusDB),
+			reply.New(radiusDB),
+		),
+		pricing_plans.New(
+			pricing_plan.NewPricingPlanStore(db),
+		),
+		admins.New(
+			adminStore,
 		),
 	)
+	if err != nil {
+		log.Fatalf("Unable to init api server: %s\n", err)
+	}
 
 	apiServer.Logger.Fatal(apiServer.Start(":" + config.GetString("api.port")))
 }

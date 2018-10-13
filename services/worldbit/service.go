@@ -2,6 +2,7 @@ package worldbit
 
 import (
 	"encoding/json"
+	"log"
 	"math"
 	"time"
 
@@ -121,7 +122,7 @@ func (service service) MonitorExchangeStatus(statusURL string) error {
 		if err != nil {
 			continue
 		}
-
+		log.Println(string(responseBytes))
 		response := new(ExchangeStatus)
 		if err := json.Unmarshal(responseBytes, response); err != nil {
 			continue

@@ -3,12 +3,13 @@ package routing
 import (
 	"testing"
 
-	"github.com/labstack/echo"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+
+	"github.com/labstack/echo"
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
 )
 
 func generateContext() echo.Context {
@@ -26,6 +27,54 @@ func generateContext() echo.Context {
 	return e.NewContext(request, recorder)
 }
 
+func generateContextWithPricingPlanID(id string) echo.Context {
+	e := echo.New()
+
+	recorder := httptest.NewRecorder()
+	request := httptest.NewRequest(
+		http.MethodPost,
+		"/test/10",
+		strings.NewReader(`{ "PricingPlanID": "`+id+`" }`),
+	)
+
+	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+	return e.NewContext(request, recorder)
+}
+
+func generateContextForPricingPlan(operation string) echo.Context {
+	e := echo.New()
+
+	recorder := httptest.NewRecorder()
+	requestMethod := http.MethodGet
+	requestPath := ""
+	requestBody := ""
+
+	switch operation {
+	case "create":
+		requestMethod = http.MethodPost
+		requestPath = "/test"
+		requestBody = `{ "amountUSD": 1 }`
+	case "update":
+		requestMethod = http.MethodPut
+		requestPath = "/test"
+		requestBody = `{ "ID": "id", "amountUSD": 2 }`
+	case "delete":
+		requestMethod = http.MethodDelete
+		requestPath = "/test"
+	}
+
+	request := httptest.NewRequest(
+		requestMethod,
+		requestPath,
+		strings.NewReader(requestBody),
+	)
+
+	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+	return e.NewContext(request, recorder)
+}
+
 func generateContextWithInvalidBody() echo.Context {
 	e := echo.New()
 
@@ -34,6 +83,36 @@ func generateContextWithInvalidBody() echo.Context {
 		http.MethodPost,
 		"/test/10",
 		strings.NewReader(`{`),
+	)
+
+	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+	return e.NewContext(request, recorder)
+}
+
+func generateContextForLogin() echo.Context {
+	e := echo.New()
+
+	recorder := httptest.NewRecorder()
+	request := httptest.NewRequest(
+		http.MethodPost,
+		"/test/10",
+		strings.NewReader(`{ "Login": "admin", "Password": "password" }`),
+	)
+
+	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+
+	return e.NewContext(request, recorder)
+}
+
+func generateContextForChangePassword(password string) echo.Context {
+	e := echo.New()
+
+	recorder := httptest.NewRecorder()
+	request := httptest.NewRequest(
+		http.MethodPut,
+		"/test/10",
+		strings.NewReader(`{ "OldPassword": "password", "NewPassword": "`+password+`"  }`),
 	)
 
 	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

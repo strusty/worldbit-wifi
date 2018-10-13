@@ -1,10 +1,15 @@
 package server
 
 import (
+	"strings"
+
+	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/routing"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
@@ -20,9 +25,11 @@ func New(
 	captchaService captcha.Captcha,
 	twilioService twilio.Twilio,
 	worldbitService worldbit.Worldbit,
-	cloudtraxService cloudtrax.Cloudtrax,
-) Server {
-	server := Server{
+	radiusService radius.Radius,
+	pricingPlanService pricing_plans.PricingPlans,
+	adminService admins.Admins,
+) (*Server, error) {
+	server := &Server{
 		Echo: echo.New(),
 	}
 
@@ -60,10 +67,26 @@ func New(
 
 	paymentRouter := routing.NewCryptoRouter(
 		worldbitService,
-		cloudtraxService,
+		radiusService,
 		twilioService,
+		pricingPlanService,
 	)
 	paymentRouter.Register(server.Group("/crypto"))
 
-	return server
+	adminRouter := routing.NewAdminRouter(adminService, pricingPlanService)
+	adminGroup := server.Group("/admin")
+	jwtMiddleware, err := jwt.Middleware(func(c echo.Context) bool {
+		if strings.HasPrefix(c.Path(), "/admin/login") {
+			return true
+		}
+		return false
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	adminGroup.Use(jwtMiddleware)
+	adminRouter.Register(adminGroup)
+
+	return server, nil
 }

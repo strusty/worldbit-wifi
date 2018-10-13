@@ -4,37 +4,48 @@ import (
 	"log"
 	"net/http"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cloudtrax"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
 )
 
 type CryptoRouter struct {
-	worldbitService  worldbit.Worldbit
-	cloudtraxService cloudtrax.Cloudtrax
-	twilioService    twilio.Twilio
+	worldbitService    worldbit.Worldbit
+	radiusService      radius.Radius
+	twilioService      twilio.Twilio
+	pricingPlanService pricing_plans.PricingPlans
 }
 
 func NewCryptoRouter(
 	worldbitService worldbit.Worldbit,
-	cloudtraxService cloudtrax.Cloudtrax,
+	radiusService radius.Radius,
 	twilioService twilio.Twilio,
+	pricingPlanService pricing_plans.PricingPlans,
 ) CryptoRouter {
 	return CryptoRouter{
-		worldbitService:  worldbitService,
-		cloudtraxService: cloudtraxService,
-		twilioService:    twilioService,
+		worldbitService:    worldbitService,
+		radiusService:      radiusService,
+		twilioService:      twilioService,
+		pricingPlanService: pricingPlanService,
 	}
 }
 
 func (router CryptoRouter) Register(group *echo.Group) {
+	group.GET("/plans", router.requestPlans)
 	group.POST("/payment", router.requestPayment)
 }
 
 func (router CryptoRouter) requestPayment(context echo.Context) error {
-	request := new(PaymentRequest)
-	if err := context.Bind(request); err != nil {
+	paymentRequest := new(PaymentRequest)
+
+	if err := context.Bind(paymentRequest); err != nil {
+		return err
+	}
+
+	plan, err := router.pricingPlanService.ByID(paymentRequest.PricingPlanID)
+	if err != nil {
 		return err
 	}
 
@@ -49,8 +60,8 @@ func (router CryptoRouter) requestPayment(context echo.Context) error {
 	}
 
 	exchange, err := router.worldbitService.CreateExchange(worldbit.CreateExchangeRequest{
-		Amount:         request.Amount * rate,
-		SenderCurrency: request.Currency,
+		Amount:         plan.AmountUSD * rate,
+		SenderCurrency: paymentRequest.Currency,
 		Address:        account.Address,
 	})
 	if err != nil {
@@ -63,30 +74,29 @@ func (router CryptoRouter) requestPayment(context echo.Context) error {
 			return
 		}
 
-		voucherCode, err := router.cloudtraxService.CreateVoucher(
-			request.NetworkID,
-			cloudtrax.Voucher{
-				Duration:  request.Voucher.Duration,
-				MaxUsers:  request.Voucher.MaxUsers,
-				UpLimit:   request.Voucher.UpLimit,
-				DownLimit: request.Voucher.DownLimit,
-				PurgeDays: request.Voucher.PurgeDays,
+		usernamePassword, err := router.radiusService.CreateCredentials(
+			radius.PricingPlan{
+				Duration:  plan.Duration,
+				MaxUsers:  plan.MaxUsers,
+				UpLimit:   plan.UpLimit,
+				DownLimit: plan.DownLimit,
+				PurgeDays: plan.PurgeDays,
 			},
 		)
 		if err != nil {
-			log.Printf("Unable to generate voucher to network id %s. Error: %s\n", request.NetworkID, err)
+			log.Printf("Unable to generate credentials for radius. Error: %s\n", err)
 			return
 		}
 
-		if err := router.twilioService.SendVoucher(request.PhoneNumber, voucherCode); err != nil {
-			log.Printf("Unable to send voucher to phone number %s. Error: %s\n", request.PhoneNumber, err)
+		if err := router.twilioService.SendVoucher(paymentRequest.PhoneNumber, usernamePassword); err != nil {
+			log.Printf("Unable to send voucher to phone number %s. Error: %s\n", paymentRequest.PhoneNumber, err)
 			return
 		}
 
 		log.Printf("Successfully generated voucher %s for user with phone number %s and network id %s\n",
-			voucherCode,
-			request.PhoneNumber,
-			request.NetworkID,
+			usernamePassword,
+			paymentRequest.PhoneNumber,
+			paymentRequest.NetworkID,
 		)
 	}()
 
@@ -94,4 +104,12 @@ func (router CryptoRouter) requestPayment(context echo.Context) error {
 		Address: exchange.Address,
 		Amount:  exchange.Amount,
 	})
+}
+
+func (router CryptoRouter) requestPlans(context echo.Context) error {
+	plans, err := router.pricingPlanService.All()
+	if err != nil {
+		return err
+	}
+	return context.JSON(http.StatusOK, plans)
 }

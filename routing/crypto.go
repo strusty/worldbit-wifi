@@ -33,7 +33,6 @@ func NewCryptoRouter(
 }
 
 func (router CryptoRouter) Register(group *echo.Group) {
-	group.GET("/plans", router.requestPlans)
 	group.POST("/payment", router.requestPayment)
 }
 
@@ -104,12 +103,4 @@ func (router CryptoRouter) requestPayment(context echo.Context) error {
 		Address: exchange.Address,
 		Amount:  exchange.Amount,
 	})
-}
-
-func (router CryptoRouter) requestPlans(context echo.Context) error {
-	plans, err := router.pricingPlanService.All()
-	if err != nil {
-		return err
-	}
-	return context.JSON(http.StatusOK, plans)
 }

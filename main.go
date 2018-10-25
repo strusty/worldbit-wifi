@@ -3,19 +3,23 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
+	"time"
 
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database/admin"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database/authentications"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database/pricing_plan"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/database/sales"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database/accounting"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database/check"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database/reply"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/server"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/cleaner"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/paypal"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
@@ -31,18 +35,11 @@ func main() {
 
 	config.AddConfigPath("./")
 	config.SetConfigName("config")
-	var prefix string
-	if os.Getenv("CRMODE") == "local" {
-		prefix = "local"
-	} else {
-		prefix = "default"
-	}
-
 	if err := config.ReadInConfig(); err != nil {
 		log.Fatalf("Fatal error getting config from file: %s \n", err)
 	}
 
-	config := config.Sub(prefix)
+	// config := config.Sub(prefix)
 
 	if err := jwt.SetRandomSecret(); err != nil {
 		log.Fatalf("Fatal error setting jwt secret: %s \n", err)
@@ -105,6 +102,18 @@ func main() {
 		}
 	}
 
+	accountingStore := accounting.NewStore(radiusDB)
+	checkStore := check.NewStore(radiusDB)
+	replyStore := reply.NewStore(radiusDB)
+
+	cleanerService := cleaner.New(
+		accountingStore,
+		checkStore,
+		replyStore,
+	)
+
+	go cleanerService.Start(time.Minute)
+
 	apiServer, err := server.New(
 		auth.New(
 			authentications.NewAuthenticationsStore(db),
@@ -133,14 +142,22 @@ func main() {
 			},
 		),
 		radius.New(
-			check.New(radiusDB),
-			reply.New(radiusDB),
+			checkStore,
+			replyStore,
 		),
 		pricing_plans.New(
 			pricing_plan.NewPricingPlanStore(db),
 		),
 		admins.New(
 			adminStore,
+		),
+		paypal.New(
+			sales.NewStore(db),
+			paypal.Config{
+				Host:     config.GetString("paypal.host"),
+				ClientID: config.GetString("paypal.clientID"),
+				Secret:   config.GetString("paypal.secret"),
+			},
 		),
 	)
 	if err != nil {

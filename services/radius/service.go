@@ -45,7 +45,7 @@ func (service service) CreateCredentials(plan PricingPlan) (string, error) {
 	if err := service.checkStore.Create(&radius_database.Check{
 		Username:  usernamePassword,
 		Attribute: "Max-Daily-Session",
-		Op:        "=",
+		Op:        ":=",
 		Value:     strconv.FormatInt(plan.Duration, 10),
 	}); err != nil {
 		return "", err

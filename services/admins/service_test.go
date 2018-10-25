@@ -1,9 +1,7 @@
 package admins
 
 import (
-	"strings"
 	"testing"
-	"unicode"
 
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
@@ -11,15 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
 )
-
-func StripWhitespaces(input string) string {
-	return strings.Map(func(r rune) rune {
-		if unicode.IsSpace(r) {
-			return -1
-		}
-		return r
-	}, input)
-}
 
 type AdminStoreMock struct {
 	CreateFn  func(admin *database.Admin) error

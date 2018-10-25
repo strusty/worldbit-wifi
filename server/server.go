@@ -8,6 +8,7 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
+	"git.sfxdx.ru/crystalline/wi-fi-backend/services/paypal"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
@@ -28,6 +29,7 @@ func New(
 	radiusService radius.Radius,
 	pricingPlanService pricing_plans.PricingPlans,
 	adminService admins.Admins,
+	paypalService paypal.PayPal,
 ) (*Server, error) {
 	server := &Server{
 		Echo: echo.New(),
@@ -65,13 +67,24 @@ func New(
 	)
 	authRouter.Register(server.Group("/auth"))
 
-	paymentRouter := routing.NewCryptoRouter(
+	cryptoRouter := routing.NewCryptoRouter(
 		worldbitService,
 		radiusService,
 		twilioService,
 		pricingPlanService,
 	)
-	paymentRouter.Register(server.Group("/crypto"))
+	cryptoRouter.Register(server.Group("/crypto"))
+
+	paypalRouter := routing.NewPayPalRouter(
+		paypalService,
+		radiusService,
+		twilioService,
+		pricingPlanService,
+	)
+	paypalRouter.Register(server.Group("/paypal"))
+
+	pricingPlansRouter := routing.NewPricingPlansRouter(pricingPlanService)
+	pricingPlansRouter.Register(server.Group("/plans"))
 
 	adminRouter := routing.NewAdminRouter(adminService, pricingPlanService)
 	adminGroup := server.Group("/admin")

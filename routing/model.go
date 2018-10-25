@@ -20,3 +20,9 @@ type PaymentResponse struct {
 	Address string `json:"address"`
 	Amount  string `json:"response"`
 }
+
+type PayPalVoucherRequest struct {
+	SaleID        string `json:"saleID"`
+	PricingPlanID string `json:"pricingPlanID"`
+	PhoneNumber   string `json:"phoneNumber"`
+}

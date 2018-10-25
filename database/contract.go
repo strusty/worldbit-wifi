@@ -20,3 +20,8 @@ type AdminStore interface {
 	ByLogin(login string) (*Admin, error)
 	ByID(id string) (*Admin, error)
 }
+
+type SalesStore interface {
+	Create(sale *UsedSale) error
+	ByPayPalSaleID(saleID string) (*UsedSale, error)
+}

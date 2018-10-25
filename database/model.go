@@ -25,3 +25,8 @@ type Admin struct {
 	Login    string `gorm:"unique"`
 	Password string
 }
+
+type UsedSale struct {
+	PayPalSaleID string `gorm:"primary_key"`
+	Voucher      string
+}

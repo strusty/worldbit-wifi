@@ -17,28 +17,51 @@ func TestRadiusCheckStore(t *testing.T) {
 			db: db,
 		}
 
-		store := New(db)
-		t.Run("Initialization", func(t *testing.T) {
-			if assert.Equal(t, testStore, store) {
-				t.Run("Create", func(t *testing.T) {
-					t.Run("Success", func(t *testing.T) {
-						check := radius_database.Reply{
-							Username:  "username",
-							Attribute: "attribute",
-							Op:        "operation",
-							Value:     "value",
-						}
+		store := NewStore(db)
+		if assert.Equal(t, testStore, store) {
 
-						if assert.NoError(t, store.Create(&check)) {
-							assert.Equal(t, uint(1), check.ID)
-						}
-					})
-					db.DropTableIfExists(&radius_database.Reply{})
-					t.Run("Error", func(t *testing.T) {
-						assert.Error(t, store.Create(&radius_database.Reply{}))
-					})
-				})
+			check := radius_database.Reply{
+				Username:  "username",
+				Attribute: "attribute",
+				Op:        "operation",
+				Value:     "value",
 			}
-		})
+
+			if assert.NoError(t, store.Create(&check)) {
+				assert.Equal(t, uint(1), check.ID)
+			}
+
+			check = radius_database.Reply{
+				Username:  "username",
+				Attribute: "attribute",
+				Op:        "operation",
+				Value:     "value",
+			}
+
+			if assert.NoError(t, store.Create(&check)) {
+				assert.Equal(t, uint(2), check.ID)
+			}
+
+			check = radius_database.Reply{
+				Username:  "usernames",
+				Attribute: "attribute",
+				Op:        "operation",
+				Value:     "value",
+			}
+
+			if assert.NoError(t, store.Create(&check)) {
+				assert.Equal(t, uint(3), check.ID)
+			}
+
+			assert.NoError(t, store.DeleteRepliesByUsername("username"))
+
+			checks := make([]radius_database.Reply, 0)
+			if assert.NoError(t, db.Find(&checks).Error) {
+				assert.Len(t, checks, 1)
+			}
+
+			db.DropTableIfExists(&radius_database.Reply{})
+			assert.Error(t, store.Create(&radius_database.Reply{}))
+		}
 	}
 }

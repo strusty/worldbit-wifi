@@ -4,11 +4,11 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"unicode"
 
 	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/utils"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/pkg/errors"
@@ -118,6 +118,15 @@ var (
 		"newPassword": "  "
 	}`
 )
+
+func StripWhitespaces(input string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsSpace(r) {
+			return -1
+		}
+		return r
+	}, input)
+}
 
 func TestNewAdminRouter(t *testing.T) {
 	adminService := &AdminServiceMock{}
@@ -364,7 +373,7 @@ func TestAdminRouter_createPlan(t *testing.T) {
 		rec := httptest.NewRecorder()
 		context := e.NewContext(req, rec)
 		if assert.NoError(t, router.createPlan(context)) {
-			assert.Equal(t, utils.StripWhitespaces(pricingPlanCreateCorrectResponse), rec.Body.String())
+			assert.Equal(t, StripWhitespaces(pricingPlanCreateCorrectResponse), rec.Body.String())
 		}
 	})
 
@@ -399,7 +408,7 @@ func TestAdminRouter_updatePlan(t *testing.T) {
 		context.SetParamNames("id")
 		context.SetParamValues("id")
 		if assert.NoError(t, router.updatePlan(context)) {
-			assert.Equal(t, utils.StripWhitespaces(pricingPlanUpdateCorrectResponse), rec.Body.String())
+			assert.Equal(t, StripWhitespaces(pricingPlanUpdateCorrectResponse), rec.Body.String())
 		}
 	})
 

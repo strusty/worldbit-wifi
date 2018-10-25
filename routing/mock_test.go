@@ -136,3 +136,20 @@ func (mock AdminServiceMock) Login(request admins.LoginRequest) (*admins.JWTResp
 func (mock AdminServiceMock) ChangePassword(adminID string, request admins.ChangePasswordRequest) error {
 	return mock.ChangePasswordFn(adminID, request)
 }
+
+/*
+	PayPalServiceMock
+*/
+
+type PayPalServiceMock struct {
+	CheckSaleFn   func(saleID string) error
+	PersistSaleFn func(saleID string, voucher string) error
+}
+
+func (mock PayPalServiceMock) CheckSale(saleID string) error {
+	return mock.CheckSaleFn(saleID)
+}
+
+func (mock PayPalServiceMock) PersistSale(saleID string, voucher string) error {
+	return mock.PersistSaleFn(saleID, voucher)
+}

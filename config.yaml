@@ -1,109 +1,60 @@
-default:
-  api:
-    port: 3000
+api:
+  port: 3000
 
-  admin:
-    login: admin
-    password: admin
+admin:
+  login: admin
+  password: admin
 
-  postgres:
-    host: localhost
-    port: 5432
-    user: postgres
-    dbName: crystalline
-    password: postgres
-    sslmode: disable
-    sslCertificatePath: SSL_CERTIFICATE_PATH
-    sslKeyPath: SSL_KEY_PATH
-    sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  dbName: crystalline
+  password: postgres
+  sslmode: disable
+  sslCertificatePath: SSL_CERTIFICATE_PATH
+  sslKeyPath: SSL_KEY_PATH
+  sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
 
-  radusDatabase:
-    host: localhost
-    port: 5432
-    user: postgres
-    dbName: radius
-    password: postgres
-    sslmode: disable
-    sslCertificatePath: SSL_CERTIFICATE_PATH
-    sslKeyPath: SSL_KEY_PATH
-    sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
+radusDatabase:
+  host: localhost
+  port: 5432
+  user: postgres
+  dbName: radius
+  password: postgres
+  sslmode: disable
+  sslCertificatePath: SSL_CERTIFICATE_PATH
+  sslKeyPath: SSL_KEY_PATH
+  sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
 
-  twilio:
-    host: https://api.twilio.com/2010-04-01
-    sid: TWILIO_SID
-    token: TWILIO_ACCESS_TOKEN
-    from: SENDER_NAME
-    confirmationCodeMessageTemplate: Your confirmation code is %s
-    voucherMessageTemplate: Your Wi-Fi voucher is %s
+twilio:
+  host: https://api.twilio.com/2010-04-01
+  sid: TWILIO_SID
+  token: TWILIO_ACCESS_TOKEN
+  from: SENDER_NAME
+  confirmationCodeMessageTemplate: Your confirmation code is %s
+  voucherMessageTemplate: Your Wi-Fi voucher is %s
 
-  worldbit:
-    apiKey: API_KEY
-    apiSecret: API_SECRET
-    merchantID: MERCHANT_ID
-    host: https://api.worldbit.com/api/v1
-    monitoringTimeout: 172800 # In seconds
-    defaultCurrency: WBTx
-    defaultEmail: default@email.com
+worldbit:
+  apiKey: API_KEY
+  apiSecret: API_SECRET
+  merchantID: MERCHANT_ID
+  host: https://api.worldbit.com/api/v1
+  monitoringTimeout: 172800 # In seconds
+  defaultCurrency: WBTx
+  defaultEmail: default@email.com
 
-  cloudtrax:
-    apiKey: API_KEY
-    apiSecret: API_SECRET
-    host: api.cloudtrax.com
+cloudtrax:
+  apiKey: API_KEY
+  apiSecret: API_SECRET
+  host: api.cloudtrax.com
 
-  recaptcha:
-    secret: GOOGLE_RECAPTCHA_SECRET
+paypal:
+  host: https://api.sandbox.paypal.com/v1
+  clientID: PAYPAL_CLIENT_ID
+  secret: PAYPAL_SECRET
 
-  confirmationCodeExpiration: EXPIRATION_TIME_IN_SECONDS
+recaptcha:
+  secret: GOOGLE_RECAPTCHA_SECRET
 
-local:
-
-  api:
-    port: 3001
-
-  admin:
-    login: admin
-    password: admin
-
-  postgres:
-    host: localhost
-    port: 5432
-    user: postgres
-    dbName: crystalline_local
-    password: postgres
-    sslmode: disable
-    sslCertificatePath: SSL_CERTIFICATE_PATH
-    sslKeyPath: SSL_KEY_PATH
-    sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
-
-  radusDatabase:
-    host: localhost
-    port: 5432
-    user: postgres
-    dbName: radius
-    password: postgres
-    sslmode: disable
-    sslCertificatePath: SSL_CERTIFICATE_PATH
-    sslKeyPath: SSL_KEY_PATH
-    sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
-
-  twilio:
-    host: https://api.twilio.com/2010-04-01
-    sid: TWILIO_SID
-    token: TWILIO_ACCESS_TOKEN
-    from: SENDER_NAME
-    confirmationCodeMessageTemplate: Your confirmation code is %s
-    voucherMessageTemplate: Your Wi-Fi voucher is %s
-
-  worldbit:
-    apiKey: API_KEY
-    apiSecret: API_SECRET
-    merchantID: MERCHANT_ID
-    host: https://api.worldbit.com/api/v1
-    monitoringTimeout: 172800 # In seconds
-    defaultCurrency: WBTx
-    defaultEmail: default@email.com
-
-  recaptcha:
-    secret: GOOGLE_RECAPTCHA_SECRET
-
-  confirmationCodeExpiration: EXPIRATION_TIME_IN_SECONDS
+confirmationCodeExpiration: EXPIRATION_TIME_IN_SECONDS

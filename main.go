@@ -26,6 +26,7 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/sevlyar/go-daemon"
 	config "github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -162,6 +163,34 @@ func main() {
 	)
 	if err != nil {
 		log.Fatalf("Unable to init api server: %s\n", err)
+	}
+
+	if config.GetBool("api.daemon") {
+		log.Println("Create daemon context")
+		context := &daemon.Context{
+			PidFileName: "wi_fi_backend_pidfile",
+			PidFilePerm: 0644,
+			LogFileName: "wi_fi_backend_logfile",
+			LogFilePerm: 0640,
+			WorkDir:     "./",
+			Umask:       027,
+		}
+		log.Println("Context rebirth")
+
+		d, err := context.Reborn()
+		if err != nil {
+			log.Fatal("Unable to run: " + err.Error())
+		}
+
+		if d != nil {
+			log.Printf("Daemon is running, and its pid is: %d \n", d.Pid)
+			return
+		}
+		defer log.Println("release context")
+		defer context.Release()
+
+		log.Println("- - - - - - - - - - - - - - -")
+		log.Println("daemon started")
 	}
 
 	apiServer.Logger.Fatal(apiServer.Start(":" + config.GetString("api.port")))

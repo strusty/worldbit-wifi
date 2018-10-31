@@ -23,7 +23,7 @@ func New(
 }
 
 func (service service) CreateCredentials(plan PricingPlan) (string, error) {
-	usernamePassword := random.String(16)
+	usernamePassword := random.String(8)
 	if err := service.checkStore.Create(&radius_database.Check{
 		Username:  usernamePassword,
 		Attribute: "Cleartext-Password",

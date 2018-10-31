@@ -5,9 +5,9 @@ import (
 	"time"
 )
 
-const charset = "abcdefghijklmnopqrstuvwxyz" +
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-	"0123456789"
+const charset = "abcdefghijkmnopqrstuvwxyz" +
+	"ABCDEFGHJKLMNPQRSTUVWXYZ" +
+	"123456789"
 
 var seededRand = rand.New(
 	rand.NewSource(time.Now().UnixNano()),

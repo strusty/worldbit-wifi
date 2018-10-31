@@ -1,10 +1,11 @@
 package auth
 
 import (
+	"time"
+
 	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"git.sfxdx.ru/crystalline/wi-fi-backend/random"
 	"github.com/pkg/errors"
-	"time"
 )
 
 type service struct {
@@ -20,7 +21,7 @@ func New(store database.AuthenticationsStore, expiration int64) Auth {
 }
 
 func (service service) CreateCode(phoneNumber string) (string, error) {
-	confirmationCode := random.String(16)
+	confirmationCode := random.String(8)
 
 	if err := service.store.Create(&database.Authentication{
 		PhoneNumber:      phoneNumber,

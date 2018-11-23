@@ -1,0 +1,256 @@
+swagger: '2.0'
+info:
+  title: CRYSTALLINE WI-FI INTERNAL API
+  version: '1'
+host: '95.216.200.100:3000'
+basePath: /
+schemes:
+  - http
+tags:
+  - name: admin
+  - name: auth
+  - name: crypto
+  - name: paypal
+  - name: plans
+paths:
+  /admin/login:
+    post:
+      tags: 
+        - admin
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              login:
+                type: string
+              password:
+                type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                
+  /admin/plans:
+    post:
+      tags: 
+        - admin
+      parameters: 
+        - in: header
+          name: Authorization
+          description: JWT from sign in
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/PricingPlanRequest'
+              
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingPlan'
+   
+  /admin/plans/{planID}:
+    put:
+      tags: 
+        - admin
+      parameters: 
+        - in: header
+          name: Authorization
+          description: JWT from sign in
+          type: string
+          required: true
+        - in: path
+          name: planID
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/PricingPlanRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingPlan' 
+    delete:
+      tags: 
+        - admin
+      parameters: 
+        - in: path
+          name: planID
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+  
+  /admin/password:
+    put:
+      tags: 
+        - admin
+      parameters: 
+        - in: header
+          name: Authorization
+          description: JWT from sign in
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              oldPassword:
+                type: string
+              newPassword:
+                type: string
+      responses:
+        200:
+          description: OK
+
+  /auth:
+    post:
+      tags:
+        - auth
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              confirmationCode:
+                type: string
+              captcha:
+                type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+  /auth/sendCode:
+    post:
+      tags:
+        - auth
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                
+  /crypto/payment:
+    post:
+      tags: 
+        - crypto
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+              networdID:
+                type: string
+              currency:
+                type: string
+              pricingPlanID:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              address:
+                type: string
+              amount:
+                type: string
+    
+  /paypal/payment:
+    post:
+      tags: 
+        - paypal
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              saleID:
+                type: string
+              pricingPlanID:
+                type: string
+              phoneNumber:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              voucher:
+                type: string
+    
+  /plans:
+    get:
+      tags: 
+        - plans
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PricingPlan'
+    
+
+  
+    
+definitions:
+  PricingPlanRequest:
+    type: object
+    properties:
+      amountUSD:
+        type: string
+      duration:
+        type: integer
+      maxUsers:
+        type: integer
+      upLimit:
+        type: integer
+      downLimit:
+        type: integer
+      purgeDays:
+        type: integer
+  PricingPlan:
+    allOf: 
+      - $ref: '#/definitions/PricingPlanRequest'
+      - type: object
+        properties:
+          id:
+            type: string
+    

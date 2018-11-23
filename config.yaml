@@ -1,10 +1,12 @@
 api:
   port: 3000
 
+# Default password and login for the admin panel. User with these credentials is generated on the start.
 admin:
   login: admin
   password: admin
 
+# Config for the main database
 postgres:
   host: localhost
   port: 5432
@@ -16,6 +18,7 @@ postgres:
   sslKeyPath: SSL_KEY_PATH
   sslRootCertificatePath: SSL_ROOT_CERTIFICATE_PATH
 
+# Config for database used by RADIUS
 radusDatabase:
   host: localhost
   port: 5432
@@ -43,11 +46,6 @@ worldbit:
   monitoringTimeout: 172800 # In seconds
   defaultCurrency: WBTx
   defaultEmail: default@email.com
-
-cloudtrax:
-  apiKey: API_KEY
-  apiSecret: API_SECRET
-  host: api.cloudtrax.com
 
 paypal:
   host: https://api.sandbox.paypal.com/v1

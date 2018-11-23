@@ -1,12 +1,12 @@
 package routing
 
 type SendCodeRequest struct {
-	PhoneNumber string
+	PhoneNumber string `json:"phoneNumber"`
 }
 
 type VerifyCodeRequest struct {
-	ConfirmationCode string
-	Captcha          string
+	ConfirmationCode string `json:"confirmationCode"`
+	Captcha          string `json:"captcha"`
 }
 
 type PaymentRequest struct {
@@ -18,7 +18,7 @@ type PaymentRequest struct {
 
 type PaymentResponse struct {
 	Address string `json:"address"`
-	Amount  string `json:"response"`
+	Amount  string `json:"amount"`
 }
 
 type PayPalVoucherRequest struct {

@@ -9,7 +9,7 @@ import (
 	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
-	validator "gopkg.in/go-playground/validator.v9"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 var jsonValidator *validator.Validate
@@ -117,7 +117,6 @@ func (router AdminRouter) changePassword(context echo.Context) error {
 	}
 
 	userID, err := jwt.GetUserIDFromJWT(context)
-
 	if err != nil {
 		return err
 	}

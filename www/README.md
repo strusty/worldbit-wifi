@@ -1,4 +1,4 @@
-#Wi-Fi crystalline front-end
+# Wi-Fi crystalline front-end
 
 This is Captive portal based on CoovaChilli. Main purpose - Wi-Fi distribution.
 For receiving Internet via Wi-Fi you need to connect to Crystalline Wi-Fi hotspot,
@@ -12,9 +12,9 @@ Frontend developed with JavaScript, HTML, CSS;
 Also ChilliLibrary was used for froen-end communication with CoovaChili and PayPal for tariff plans payments.
 
 
+## Start in dev environment
 
-##Start in dev environment
-####Project is using YARN package manager.
+#### Project is using YARN package manager.
 
 Download dependencies via YARN 
 
@@ -24,7 +24,7 @@ Start project
 
 ```yarn start```
 
-###Start in production
+### Start in production
 
  1) Install firmware OPENWrt to devices;
  2) Install CoovaChili Captive Portal;

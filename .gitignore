@@ -2,3 +2,13 @@
 .idea/
 vendor/
 *.db
+
+.DS_Store
+
+# www
+www/node_modules
+www/.idea
+www/.DS_Store
+www/npm-debug.log*
+www/yarn-debug.log*
+www/yarn-error.log*

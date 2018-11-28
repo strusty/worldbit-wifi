@@ -1,0 +1,15 @@
+{
+  "name": "front",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "pure": "./node_modules/.bin/browserify pure/scripts.js -o pure/bundle.js",
+    "eject": "react-scripts eject"
+  }
+}

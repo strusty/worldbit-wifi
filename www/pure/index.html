@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">-->
+    <title>SunGrp</title>
+    <meta name="viewport" content="width=device-width" initial-scale="1.0" shrink-to-fit="no">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script src="PayPal.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <!--<script id='chillijs' src='chilli.js'></script>-->
+    <link
+            href="https://fonts.googleapis.com/css?family=Libre+Franklin:300,300i,400,400i,500,500i,700,700i"
+            rel="stylesheet"
+    >
+</head>
+<body>
+<div class="alert-show">
+    <div class="alert-block">
+        <div class="alert-block--text">
+            confirm the action
+        </div>
+        <div class='alert-block--button' >
+            <button id="alert-block--button-ok" class="alert-block--button-on">ok</button>
+            <button id='alert-block--button-no'  class="alert-block--button-on">no</button>
+        </div>
+    </div>
+</div>
+<header class="header">
+    <div class="header-content">
+        <div class="block-info">
+            <div class="block-logo">CRYSTALLINE - WI-FI</div>
+            <div class="block-text">Welcome to the crystalline - wi-fi.
+                Go through the avtarization, choose the suitable tariff for you and the suitable tariff plan. Thanks for
+                using our service.
+            </div>
+        </div>
+        <div id="block-switch" class="block-switch">
+
+            <div class="sign-in-voucher">
+                <div class="sign-in-border"></div>
+                <div class="sign-in-text">
+                    voucher
+                </div>
+                <div class="sign-in-border"></div>
+            </div>
+            <div class="voucher-block">
+                <div class="voucher-block--input">
+                    <input class="voucher--input" name="phone" placeholder="Enter your voucher here..."/>
+                    <div class="voucher--error"></div>
+                </div>
+                <button class="voucher-button">send voucher to confirm the fare</button>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="Login-bg">
+    <div class="Login-form">
+        <form id="main-form">
+            <h2>Registration</h2>
+            <input id="main-input" name="phone"   placeholder="Phone number +XXXXX..."/>
+            <div id="captcha" class="recaptcha-container">
+                <div class="g-recaptcha" data-sitekey="6Lf7SncUAAAAAFBw760DDh9i61wX_uSg7l6akaOS"></div>
+            </div>
+            <button id="phone-btn" class="button" type="submit">Send code by SMS</button>
+        </form>
+        <div class="switch">
+            <div class="wallet"></div>
+
+            <div class="paypal">
+                <!-- PayPal Button Start -->
+                <div id="paypal-button"></div>
+
+                <!-- PayPal Button End -->
+            </div>
+            <div id="crypto-tariff" class="block-crypto">
+                <ul id="crypto" class="crypto">
+
+                </ul>
+
+            </div>
+
+
+        </div>
+        <div class="extra"></div>
+    </div>
+</div>
+<script src="ChilliLibrary.js"></script>
+<script src="scripts.js" type="application/javascript"></script>
+</body>
+</html>

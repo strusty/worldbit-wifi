@@ -1,0 +1,85 @@
+config chilli
+
+
+# -*- mode: shell-script; -*-
+#
+#   Coova-Chilli Default Configurations.
+#   To customize, copy this file to /etc/chilli/config
+#   and edit to your liking. This is included in shell scripts
+#   that configure chilli and related programs before file 'config'.
+
+HS_LOC_ID="1"
+HS_LOC_NAME="xxxxxx"
+HS_NASID=<>
+
+#############################################################
+
+HS_WANIF=eth0.2               # WAN Interface toward the Internet
+HS_LANIF=wlan0               # Subscriber Interface for client devices
+HS_UAMPORT=3990            # HotSpot UAM Port (on subscriber network)
+HS_UAMUIPORT=4990          # HotSpot UAM "UI" Port (on subscriber network, for embedded portal)
+HS_MAXCLIENTS=4096
+
+# LOCAL MAC addresses
+#HS_MACALLOWLOCAL=on
+#HS_MACALLOW="XX-XX-XX-XX-XX-XX,XX-XX-XX-XX-XX-XX"
+
+# Below this line is pretty much standard for HotSpotSystems
+
+HS_DNS1=8.8.8.8
+HS_DNS2=8.8.4.4
+
+HS_NETWORK=<tunnel coova>
+HS_NETMASK=<Subnet mask>
+HS_UAMLISTEN=<ip opnwrt>
+HS_DNS_DOMAIN=key.chillispot.info
+HS_DYNIP=<tunnel coova>
+HS_DYNIP_MASK=<Subnet mask>
+HS_RADIUS=<radius server ip>
+HS_RADIUS2=<radius server ip>
+HS_LEASE=172800
+HS_SWAPOCTETS="on"
+
+HS_UAMHOMEPAGE=""
+HS_UAMFORMAT=<url frontend>
+HS_PROVIDER="HotSpotSystem"
+HS_PROVIDER_LINK=<url frontend>
+
+HS_MODE=hotspot
+HS_TYPE=chillispot
+hs_lan_access="deny"
+
+
+HS_RADCONF="off"
+HS_UAMSERVER=<url frontend>
+HS_UAMSECRET=<your secret>
+HS_RADSECRET=<your secret>
+HS_UAMSERVER=<url frontend>
+HS_AAA="radius"
+HS_WWWDIR=/etc/chilli/www
+HS_WWWBIN=/etc/chilli/wwwsh
+
+HS_UAMALLOW="194.149.46.0/24 <radius server ip>  198.241.128.0/17 66.211.128.0/17 216.113.128.0/17 70.42.128.0/17 \
+             128.242.125.0/24 216.52.17.0/24 62.249.232.74 155.136.68.77 155.136.66.34 \
+             66.4.128.0/17 66.211.128.0/17 66.235.128.0/17 88.221.136.146 195.228.254.149 \
+             195.228.254.152 203.211.140.157 203.211.150.204 \
+             www.paypal.com www.paypalobjects.com live.adyen.com \
+             www.worldpay.com select.worldpay.com secure.ims.worldpay.com \
+             www.rbsworldpay.com secure.wp3.rbsworldpay.com www.directebanking.com \
+             betalen.rabobank.nl ideal.ing.nl secure.simplepay.hu securepay.simplepay.hu \
+             ideal.abnamro.nl www.ing.nl api.mailgun.net \
+             gv.symcd.com cdp.rapidssl.com status.rapidssl.com crl3.digicert.com crl4.digicert.com \
+             www.hotspotsystem.com customer.hotspotsystem.com tech.hotspotsystem.com \
+             a1.hotspotsystem.com a2.hotspotsystem.com a3.hotspotsystem.com a4.hotspotsystem.com \
+             a5.hotspotsystem.com a6.hotspotsystem.com a7.hotspotsystem.com a8.hotspotsystem.com \
+             a9.hotspotsystem.com a10.hotspotsystem.com a11.hotspotsystem.com a12.hotspotsystem.com \
+             a13.hotspotsystem.com a14.hotspotsystem.com a15.hotspotsystem.com a16.hotspotsystem.com \
+             a17.hotspotsystem.com a18.hotspotsystem.com a19.hotspotsystem.com a20.hotspotsystem.com \
+             a21.hotspotsystem.com a22.hotspotsystem.com a23.hotspotsystem.com a24.hotspotsystem.com \
+             a25.hotspotsystem.com a26.hotspotsystem.com a27.hotspotsystem.com a28.hotspotsystem.com \
+             a29.hotspotsystem.com a30.hotspotsystem.com,<url frontend> ,<radius server ip>
+
+
+
+
+HS_UAMDOMAINS=".novotelecom.ru .paypal.com .paypalobjects.com .paypalobjects.com .google.com .gstatic.com fonts.googleapis.com .sandbox.paypal.com fon

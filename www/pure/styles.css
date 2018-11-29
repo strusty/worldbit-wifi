@@ -1,0 +1,584 @@
+* {
+    box-sizing: border-box;
+}
+
+*:focus {
+    outline: 0;
+}
+
+html {
+    width: 100%;
+    min-width: 100%;
+}
+
+body {
+    font-family: 'Libre Franklin', sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+}
+
+.alert {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0.95;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    position: absolute;
+
+}
+
+.alert-block--text {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    font-size: xx-large;
+
+}
+
+.alert-block {
+    width: 450px;
+    height: 170px;
+    background-color: rgb(236, 240, 241);
+    margin-top: 300px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+}
+
+.alert-block--button {
+    display: flex;
+    justify-content: center;
+}
+
+.alert-block--button-on {
+    color: white;
+    width: 100%;
+    height: 35px;
+    font-size: 125%;
+    font-weight: 700;
+    text-decoration: none;
+    border: solid 2px rgb(236, 240, 241);
+    background: rgb(52, 73, 94);
+
+}
+
+.alert-block--button-on:hover {
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0), inset 0 1px 2px rgba(0, 0, 0, 0), inset 0 0 0 60px rgb(52, 73, 94);
+    border-color: rgb(52, 73, 94);
+    color: gold;
+}
+
+.alert-block--button-on:active {
+    border-color: black;
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, .1), inset 0 1px 2px rgba(0, 0, 0, .3), inset 0 0 0 60px gold;
+}
+
+.alert-show {
+    display: none;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    background: rgb(44, 49, 58);
+    width: 100%;
+
+}
+
+.switch-header-button {
+    display: flex;
+    justify-content: space-between;
+    background: rgb(44, 49, 58);
+    min-width: 200px;
+}
+
+#button-paypal {
+    margin-right: 5px;
+    color: gold;
+}
+
+#button-crypto {
+    margin-left: 5px;
+}
+
+.header-content {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.block-switch {
+    display: none;
+    flex-direction: column;
+    max-width: 500px;
+
+}
+
+.block-info {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    padding-right: 10px;
+
+}
+
+.switch-button {
+    border: solid 2px rgb(44, 49, 58);
+    height: 35px;
+    background: rgb(52, 73, 94);
+    color: white;
+    width: 200px;
+    margin-top: 10px;
+    font-size: x-large
+}
+
+.switch-button:hover {
+    border: solid 2px rgb(52, 73, 94);
+    color: white;
+}
+
+.voucher-button {
+    border: solid 2px rgb(44, 49, 58);
+    height: 35px;
+    background: rgb(52, 73, 94);
+    color: white;
+    margin-top: 10px;
+    font-size: smaller;
+    margin-bottom: 30px;
+}
+
+.voucher-button:active {
+    border-color: black;
+    color: black;
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, .1), inset 0 1px 2px rgba(0, 0, 0, .3), inset 0 0 0 60px gold;
+}
+
+.voucher-button:hover {
+    border: solid 2px rgb(52, 73, 94);
+
+}
+
+.voucher-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.voucher--input {
+    height: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0 10px;
+    margin-bottom: 20px;
+}
+
+.sign-in {
+    display: flex;
+    color: white;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.sign-in-voucher {
+    display: flex;
+    color: white;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.sign-in-border {
+    display: flex;
+    color: white;
+    width: 100%;
+    border-bottom: solid 2px rgb(52, 73, 94);
+}
+
+.sign-in-text {
+    text-align: center;
+    width: 450px;
+}
+
+.block-text {
+    color: white;
+    font-size: small;
+    margin-top: 10px;
+    width: 300px;
+    margin-bottom: 30px;
+}
+
+.block-logo {
+    margin-top: 30px;
+    color: white;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.Login-bg {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.Login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 30px;
+    width: 100%;
+    /*max-width: 500px;*/
+
+}
+
+.Login-form > form {
+    width: 302px;
+}
+
+.Login-form > form > h2 {
+    color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.Login-form > form > input {
+    width: 100%;
+    height: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0 10px;
+    margin-bottom: 20px;
+}
+
+.Login-form > form > input::placeholder {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.Login-form > form > .button {
+    width: 100%;
+    height: 30px;
+    color: white;
+    background: rgb(52, 73, 94);
+}
+
+.Login-form > form > .button:hover {
+    border: solid 2px rgb(52, 73, 94);
+    color: gold;
+}
+
+.Login-form > .extra {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 70px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.Login-form > .extra > .back {
+    font-size: 14px;
+    color: blue;
+    text-decoration: underline;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.Login-form > .extra > .error {
+    margin-top: 10px;
+    font-size: 14px;
+    color: red;
+}
+.loading {
+    color: gold;
+    text-align: center;
+}
+
+.loader {
+    margin-top: 10px;
+    font-size: 14px;
+    color: black;
+}
+
+.recaptcha-container {
+    display: none;
+    min-height: 90px;
+}
+
+.recaptcha-container.show {
+    display: block;
+}
+
+.switch {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.switch.show {
+    display: flex;
+}
+
+.switch .switch-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.switch .switch-header .switch-header-item {
+    display: inline-block;
+    color: black;
+    width: 85px;
+    height: 35px;
+    font-size: 125%;
+    font-weight: 700;
+    text-decoration: none;
+    user-select: none;
+    padding: .25em .5em;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 7px;
+    box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0), inset 0 1px 2px rgba(0, 0, 0, 0), inset 0 0 0 60px rgba(255, 255, 0, 0);
+    transition: box-shadow .2s, border-color .2s;
+}
+
+.switch .switch-header .switch-header-item:hover {
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0), inset 0 1px 2px rgba(0, 0, 0, 0), inset 0 0 0 60px rgba(255, 248, 29, 0.5);
+}
+
+.switch .switch-header .switch-header-item:active {
+    padding: calc(.25em + 1px) .5em calc(.25em - 1px);
+    border-color: rgba(177, 159, 0, 1);
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, .1), inset 0 1px 2px rgba(0, 0, 0, .3), inset 0 0 0 60px rgba(255, 255, 0, .45);
+}
+
+.switch .switch-header .switch-header-item.active {
+    background-color: antiquewhite;
+}
+
+.voucher-block--input {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.voucher--error {
+    color: red;
+}
+
+form {
+    margin-top: 30px;
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.paypal.show {
+    display: none;
+}
+
+.crypto.show {
+    display: none;
+}
+
+ul.crypto {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+}
+
+.block-crypto {
+    display: flex;
+    justify-content: center;
+    max-width: 1140px;
+}
+
+ul.crypto li {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+    padding: 8px;
+}
+
+ul.crypto li .c-h {
+    font-size: 20px;
+    font-weight: 600;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    color: rgb(39, 173, 96);
+}
+
+ul.crypto li .c-cont {
+    display: flex;
+    flex-direction: column;
+    /*align-items: center;*/
+}
+
+ul.crypto li .c-cont .c-price {
+    font-size: 30px;
+    font-weight: 700;
+
+}
+
+ul.crypto li .c-cont .c-lim {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+ul.crypto li .c-cont .c-period {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.c-h {
+    z-index: 0;
+}
+
+.c-cont {
+    z-index: 0;
+    color: rgb(44, 49, 58);
+}
+
+li:hover {
+    border: solid 3px rgb(236, 240, 241);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+}
+
+li {
+    border: solid 3px white;
+    background: rgb(236, 240, 241);
+
+    width: 350px;
+}
+
+.button-buy {
+    color: white;
+    width: 100%;
+    height: 35px;
+    font-size: 125%;
+    font-weight: 700;
+    text-decoration: none;
+    border: solid 2px rgb(236, 240, 241);
+    background: rgb(52, 73, 94);
+
+}
+
+.button-buy:hover {
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0), inset 0 1px 2px rgba(0, 0, 0, 0), inset 0 0 0 60px rgb(52, 73, 94);
+    border-color: rgb(52, 73, 94);
+
+}
+
+.button-buy:active {
+    color: black;
+    border-color: black;
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, .1), inset 0 1px 2px rgba(0, 0, 0, .3), inset 0 0 0 60px gold;
+}
+
+.butBlock {
+    display: flex;
+    justify-content: center;
+
+}
+
+.paypal-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 520px) {
+    .Login-form {
+        margin-top: 30px;
+        padding: 10px 30px;
+        margin-bottom: 200px;
+    }
+
+    li {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 733px) {
+    .block-logo {
+        display: flex;
+        justify-content: center;
+    }
+
+    .block-text {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    .header-content {
+        width: 300px;
+        flex-direction: column;
+    }
+
+    .sign-in {
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
+
+    .sign-in-voucher {
+        margin-top: 5px;
+    }
+}
+
+@media screen and (max-width: 1110px) {
+    .block-info {
+        display: flex;
+        flex-direction: column;
+        max-width: 320px;
+        padding-right: 10px;
+    }
+
+    .block-switch {
+        display: none;
+        flex-direction: column;
+        max-width: 320px;
+    }
+
+    .switch-button {
+        height: 30px;
+        background: rgb(52, 73, 94);
+        color: white;
+        border-color: rgb(52, 73, 94);
+        width: 150px;
+        margin-top: 0;
+        font-size: small;
+    }
+
+    .block-logo {
+        font-size: x-large;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .crypto {
+        justify-content: center;
+    }
+}

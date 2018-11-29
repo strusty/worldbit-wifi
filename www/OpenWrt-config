@@ -1,0 +1,26 @@
+config OpenWrt:
+
+radiusnasid="OpenWrt"
+radiussecret=<your secret>
+radiusserver1=<radius server ip>
+radiusserver2=<radius server ip>
+dhcpif="br-radius"
+dns1="8.8.8.8"
+dns2="8.8.4.4"
+tundev="tun0"
+net="192.168.182.0/24"
+uamlisten="192.168.182.1"
+lease="86400"
+leaseplus="600"
+uamserver=<frontend url>
+uamport="3990"
+uamuiport="4990"
+uamaliasip="1.0.0.1"
+uamaliasname="login"
+nouamsuccess
+uamallowed="<frontend url>,192.168.182.1"
+uamdomain=".novotelecom.ru,.paypal.com,.paypalobjects.com,www.paypalobjects.com,www.google.com,www.gstatic.com,fonts.googleapis.com,.sandbox.paypal.com,fonts.gstatic.com,.stats.paypal.com,api.worldbit.com,www.api.worldbit.com,t.paypalcom,c.paypal.com,c6.paypal.com,b.stats.paypal.com,hnd.stats.paypal.com,nexus.ensighten.com,www.google-analytics.com,ad.doubleclick.net,adservice.google.com"
+swapoctets
+interval="3600"
+
+

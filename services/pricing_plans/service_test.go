@@ -3,9 +3,9 @@ package pricing_plans
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/database"
 )
 
 type PricingPlanStoreMock struct {

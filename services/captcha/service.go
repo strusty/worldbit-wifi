@@ -2,8 +2,9 @@ package captcha
 
 import (
 	"encoding/json"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/http"
 	"net/url"
+
+	"github.com/strusty/worldbit-wifi/http"
 )
 
 type service struct {

@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
+	"github.com/strusty/worldbit-wifi/services/radius"
+	"github.com/strusty/worldbit-wifi/services/worldbit"
 )
 
 func TestNewCryptoRouter(t *testing.T) {

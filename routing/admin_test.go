@@ -6,13 +6,13 @@ import (
 	"testing"
 	"unicode"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/jwt"
+	"github.com/strusty/worldbit-wifi/services/admins"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
 )
 
 var (

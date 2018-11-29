@@ -2,11 +2,11 @@ package auth
 
 import (
 	"testing"
+	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
-	"time"
+	"github.com/strusty/worldbit-wifi/database"
 )
 
 type AuthenticationsStoreMock struct {

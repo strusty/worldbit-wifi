@@ -3,18 +3,18 @@ package server
 import (
 	"strings"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/routing"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/paypal"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/strusty/worldbit-wifi/jwt"
+	"github.com/strusty/worldbit-wifi/routing"
+	"github.com/strusty/worldbit-wifi/services/admins"
+	"github.com/strusty/worldbit-wifi/services/auth"
+	"github.com/strusty/worldbit-wifi/services/captcha"
+	"github.com/strusty/worldbit-wifi/services/paypal"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
+	"github.com/strusty/worldbit-wifi/services/radius"
+	"github.com/strusty/worldbit-wifi/services/twilio"
+	"github.com/strusty/worldbit-wifi/services/worldbit"
 )
 
 type Server struct {

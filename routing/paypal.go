@@ -3,11 +3,11 @@ package routing
 import (
 	"net/http"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/paypal"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
 	"github.com/labstack/echo"
+	"github.com/strusty/worldbit-wifi/services/paypal"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
+	"github.com/strusty/worldbit-wifi/services/radius"
+	"github.com/strusty/worldbit-wifi/services/twilio"
 )
 
 type PayPalRouter struct {

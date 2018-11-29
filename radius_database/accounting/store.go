@@ -1,8 +1,8 @@
 package accounting
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database"
 	"github.com/jinzhu/gorm"
+	"github.com/strusty/worldbit-wifi/radius_database"
 )
 
 type store struct {

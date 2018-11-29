@@ -3,9 +3,9 @@ package radius
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/radius_database"
 )
 
 type CheckStoreMock struct {

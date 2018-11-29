@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/database"
 	"gopkg.in/jarcoal/httpmock.v1"
 )
 

@@ -3,8 +3,8 @@ package radius
 import (
 	"strconv"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/random"
+	"github.com/strusty/worldbit-wifi/radius_database"
+	"github.com/strusty/worldbit-wifi/random"
 )
 
 type service struct {

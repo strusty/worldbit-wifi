@@ -3,9 +3,9 @@ package jwt
 import (
 	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/random"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/strusty/worldbit-wifi/random"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"

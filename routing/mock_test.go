@@ -1,10 +1,10 @@
 package routing
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/admins"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/radius"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/worldbit"
+	"github.com/strusty/worldbit-wifi/services/admins"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
+	"github.com/strusty/worldbit-wifi/services/radius"
+	"github.com/strusty/worldbit-wifi/services/worldbit"
 )
 
 /*

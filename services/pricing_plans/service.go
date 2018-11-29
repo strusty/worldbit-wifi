@@ -1,8 +1,8 @@
 package pricing_plans
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/gofrs/uuid"
+	"github.com/strusty/worldbit-wifi/database"
 )
 
 type service struct {

@@ -1,12 +1,13 @@
 package routing
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
+	"net/http"
+
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
-	"net/http"
+	"github.com/strusty/worldbit-wifi/services/auth"
+	"github.com/strusty/worldbit-wifi/services/captcha"
+	"github.com/strusty/worldbit-wifi/services/twilio"
 )
 
 type AuthRouter struct {

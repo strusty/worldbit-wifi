@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/http"
 	"github.com/pkg/errors"
+	"github.com/strusty/worldbit-wifi/database"
+	"github.com/strusty/worldbit-wifi/http"
 )
 
 type service struct {

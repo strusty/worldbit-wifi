@@ -1,9 +1,9 @@
 package authentications
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/gofrs/uuid"
 	"github.com/jinzhu/gorm"
+	"github.com/strusty/worldbit-wifi/database"
 )
 
 type store struct {

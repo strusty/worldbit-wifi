@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/pkg/errors"
 	"github.com/strusty/worldbit-wifi/services/auth"
 	"github.com/strusty/worldbit-wifi/services/captcha"
 	"github.com/strusty/worldbit-wifi/services/twilio"
@@ -57,15 +56,6 @@ func (router AuthRouter) authenticate(context echo.Context) error {
 	request := new(VerifyCodeRequest)
 	if err := context.Bind(request); err != nil {
 		return err
-	}
-
-	captchaVerified, err := router.captchaService.CheckCaptcha(request.Captcha)
-	if err != nil {
-		return err
-	}
-
-	if !captchaVerified {
-		return errors.New("Captcha has not passed verification")
 	}
 
 	if err := router.authService.VerifyCode(request.ConfirmationCode); err != nil {

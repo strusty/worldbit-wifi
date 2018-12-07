@@ -38,12 +38,12 @@ function pay(selector, value, id) {
             // Execute the payment
             onAuthorize: function (data, actions) {
                 return actions.payment.execute().then(function (response) {
-                    console.log(1234567,response);
                     methods.post(host + '/paypal/payment', "POST", PayPalVoucherRequest = {
 
                         SaleID : response.transactions[0].related_resources[0].sale.id,
                         PricingPlanID: id,
-                        PhoneNumber : localStorage.getItem('PhoneNumber'),
+                        // PhoneNumber : localStorage.getItem('PhoneNumber'),
+                      PhoneNumber : getCookie('PhoneNumber'),
                     }, function (el) {
                         console.log('capch', el);
 

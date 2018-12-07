@@ -19,6 +19,26 @@ body {
 
 }
 
+.input-wrapper{
+    display: flex;
+}
+
+.input-wrapper-show {
+    display: none;
+}
+
+.wallet {
+    font-size: 13px;
+}
+
+
+.alert-block--text-wrapper {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
 .alert {
     display: flex;
     justify-content: center;
@@ -33,22 +53,50 @@ body {
 
 }
 
+.alert-block--button-on-show {
+    display: none;
+}
+
+.input-alert-address {
+    border: none;
+    text-align: center;
+}
+
+.label-input{
+    margin-left: 5px;
+}
+
+.input-alert-sum {
+    border: none;
+    text-align: center;
+}
+
 .alert-block--text {
-    margin-top: 50px;
     display: flex;
     justify-content: center;
     font-size: xx-large;
 
 }
 
+.input-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .alert-block {
-    width: 450px;
+    width: 320px;
     height: 170px;
     background-color: rgb(236, 240, 241);
-    margin-top: 300px;
+    top: 30%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    position: fixed;
 
 }
 
@@ -434,7 +482,7 @@ ul.crypto li .c-cont {
 }
 
 ul.crypto li .c-cont .c-price {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 700;
 
 }
@@ -474,7 +522,6 @@ li {
 .button-buy {
     color: white;
     width: 100%;
-    height: 35px;
     font-size: 125%;
     font-weight: 700;
     text-decoration: none;
@@ -530,7 +577,7 @@ li {
         justify-content: center;
         text-align: center;
         margin-top: 10px;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
     }
 
     .header-content {

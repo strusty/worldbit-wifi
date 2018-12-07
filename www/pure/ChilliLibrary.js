@@ -449,7 +449,7 @@ chilliController.processReply = function ( resp ) {
  *
  */
 
-var chilliJSON = { timeout:25000 , timer:0 , node:0 , timestamp:0 };
+var chilliJSON = { timeout:250000 , timer:0 , node:0 , timestamp:0 };
 
 chilliJSON.expired   = function () {
 

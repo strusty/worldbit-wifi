@@ -4,9 +4,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/http"
-	"github.com/pkg/errors"
 	"net/url"
+
+	"github.com/pkg/errors"
+	"github.com/strusty/worldbit-wifi/http"
 )
 
 type service struct {

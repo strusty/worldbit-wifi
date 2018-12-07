@@ -3,9 +3,9 @@ package auth
 import (
 	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/random"
 	"github.com/pkg/errors"
+	"github.com/strusty/worldbit-wifi/database"
+	"github.com/strusty/worldbit-wifi/random"
 )
 
 type service struct {

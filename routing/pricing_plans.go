@@ -3,8 +3,8 @@ package routing
 import (
 	"net/http"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
 	"github.com/labstack/echo"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
 )
 
 type PricingPlansRouter struct {

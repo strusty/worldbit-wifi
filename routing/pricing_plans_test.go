@@ -3,10 +3,10 @@ package routing
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/pricing_plans"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/services/pricing_plans"
 )
 
 func TestNewPricingPlansRouter(t *testing.T) {

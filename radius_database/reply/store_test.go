@@ -3,10 +3,10 @@ package reply
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/radius_database"
 )
 
 func TestRadiusCheckStore(t *testing.T) {

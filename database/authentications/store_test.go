@@ -3,10 +3,10 @@ package authentications
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/database"
 )
 
 func TestAuthenticationsStore(t *testing.T) {

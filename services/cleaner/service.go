@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/radius_database"
+	"github.com/strusty/worldbit-wifi/radius_database"
 )
 
 type service struct {

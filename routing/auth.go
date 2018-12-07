@@ -1,12 +1,12 @@
 package routing
 
 import (
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/auth"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/captcha"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/services/twilio"
-	"github.com/labstack/echo"
-	"github.com/pkg/errors"
 	"net/http"
+
+	"github.com/labstack/echo"
+	"github.com/strusty/worldbit-wifi/services/auth"
+	"github.com/strusty/worldbit-wifi/services/captcha"
+	"github.com/strusty/worldbit-wifi/services/twilio"
 )
 
 type AuthRouter struct {
@@ -56,15 +56,6 @@ func (router AuthRouter) authenticate(context echo.Context) error {
 	request := new(VerifyCodeRequest)
 	if err := context.Bind(request); err != nil {
 		return err
-	}
-
-	captchaVerified, err := router.captchaService.CheckCaptcha(request.Captcha)
-	if err != nil {
-		return err
-	}
-
-	if !captchaVerified {
-		return errors.New("Captcha has not passed verification")
 	}
 
 	if err := router.authService.VerifyCode(request.ConfirmationCode); err != nil {

@@ -3,10 +3,10 @@ package admins
 import (
 	"testing"
 
-	"git.sfxdx.ru/crystalline/wi-fi-backend/database"
-	"git.sfxdx.ru/crystalline/wi-fi-backend/jwt"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/strusty/worldbit-wifi/database"
+	"github.com/strusty/worldbit-wifi/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
 
